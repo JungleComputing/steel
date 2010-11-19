@@ -2,7 +2,7 @@ package ibis.steel;
 
 import java.io.PrintStream;
 
-class ExponentialDecayEstimator implements EstimatorInterface {
+public class ExponentialDecayEstimator implements EstimatorInterface {
 	private double average = 0.0;
 	private double variance = 0.0;
 	private final double alpha;
@@ -122,8 +122,8 @@ class ExponentialDecayEstimator implements EstimatorInterface {
 
 	@Override
 	public void setInitialEstimate(final Estimate v) {
-		average = v.mean;
-		variance = v.variance;
+		average = v.getMean();
+		variance = v.getVariance();
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package ibis.steel;
 
 import java.io.PrintStream;
 
-class GaussianEstimator implements EstimatorInterface {
+public class GaussianEstimator implements EstimatorInterface {
 	private double average = 0.0;
 	private double S = 0.0;
 	private int sampleCount = 0;
@@ -118,8 +118,8 @@ class GaussianEstimator implements EstimatorInterface {
 
 	@Override
 	public void setInitialEstimate(final Estimate timeEstimate) {
-		average = timeEstimate.mean;
-		S = timeEstimate.variance;
+		average = timeEstimate.getMean();
+		S = timeEstimate.getVariance();
 		sampleCount = 1;
 
 	}

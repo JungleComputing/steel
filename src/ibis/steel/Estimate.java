@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class Estimate implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final Estimate ZERO = new Estimate(0, 0);
-	final double mean;
-	final double variance;
+	private final double mean;
+	private final double variance;
 
 	public Estimate(final double mean, final double variance) {
 		this.mean = mean;
@@ -17,21 +17,30 @@ public class Estimate implements Serializable {
 		if (b == null) {
 			return null;
 		}
-		return new Estimate(mean + b.mean, variance + b.variance);
+		return new Estimate(getMean() + b.getMean(), getVariance()
+				+ b.getVariance());
 	}
 
 	public Estimate multiply(final double c) {
-		return new Estimate(c * mean, c * c * variance);
+		return new Estimate(c * getMean(), c * c * getVariance());
 	}
 
-	double getPessimisticEstimate() {
-		return mean + Math.sqrt(variance);
+	public double getPessimisticEstimate() {
+		return getMean() + Math.sqrt(getVariance());
 	}
 
-	double getLikelyValue() {
+	public double getLikelyValue() {
 		// TODO: for low sample count the variation should be larger.
-		final double stdDev = Math.sqrt(variance);
+		final double stdDev = Math.sqrt(getVariance());
 
-		return mean + stdDev * Globals.rng.nextGaussian();
+		return getMean() + stdDev * Globals.rng.nextGaussian();
+	}
+
+	public double getMean() {
+		return mean;
+	}
+
+	public double getVariance() {
+		return variance;
 	}
 }

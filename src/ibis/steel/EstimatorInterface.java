@@ -2,7 +2,7 @@ package ibis.steel;
 
 import java.io.PrintStream;
 
-interface EstimatorInterface {
+public interface EstimatorInterface {
 
 	/**
 	 * If we don't have a better estimate, use this one.
