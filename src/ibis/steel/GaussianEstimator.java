@@ -2,130 +2,97 @@ package ibis.steel;
 
 import java.io.PrintStream;
 
-public class GaussianEstimator implements EstimatorInterface {
-	private double average = 0.0;
-	private double S = 0.0;
-	private int sampleCount = 0;
+/**
+ * An estimator that assumes a Gaussian distribution for the estimated value.
+ * 
+ * @author Kees van Reeuwijk
+ * 
+ */
+public class GaussianEstimator implements Estimator {
+    private double average = 0.0;
+    private double S = 0.0;
+    private int sampleCount = 0;
 
-	@Override
-	public void addSample(final double value) {
-		sampleCount++;
-		final double oldAverage = average;
-		average += (value - average) / sampleCount;
-		S += (value - oldAverage) * (value - average);
-	}
+    @Override
+    public void addSample(final double value) {
+        sampleCount++;
+        final double oldAverage = average;
+        average += (value - average) / sampleCount;
+        S += (value - oldAverage) * (value - average);
+    }
 
-	@Override
-	public double getAverage() {
-		return average;
-	}
+    private double getStdDev() {
+        if (sampleCount < 2) {
+            return Double.POSITIVE_INFINITY;
+        }
+        return Math.sqrt(S / sampleCount);
+    }
 
-	@Override
-	public double getStdDev() {
-		if (sampleCount < 2) {
-			return Double.POSITIVE_INFINITY;
-		}
-		return Math.sqrt(S / sampleCount);
-	}
+    // FIXME: this is just an intuitive approximation of a likely values comp.
+    double getLikelyError() {
+        final double stdDev = getStdDev();
+        return stdDev + 0.1 * average / Math.sqrt(sampleCount);
+    }
 
-	// FIXME: this is just an intuitive approximation of a likely values comp.
-	double getLikelyError() {
-		final double stdDev = getStdDev();
-		return stdDev + 0.1 * average / Math.sqrt(sampleCount);
-	}
+    private static double getLikelyValue(final double average,
+            final double stdDev) {
+        return average + stdDev * Globals.rng.nextGaussian();
+    }
 
-	private static double getLikelyValue(final double average,
-			final double stdDev) {
-		return average + stdDev * Globals.rng.nextGaussian();
-	}
+    @Override
+    public double getHighEstimate() {
+        if (sampleCount < 1) {
+            return Double.POSITIVE_INFINITY;
+        }
+        return average + Math.sqrt(S / sampleCount);
+    }
 
-	@Override
-	public double getPessimisticEstimate() {
-		if (sampleCount < 1) {
-			return Double.POSITIVE_INFINITY;
-		}
-		return average + Math.sqrt(S / sampleCount);
-	}
+    @Override
+    public double getLikelyValue() {
+        final double err = getLikelyError();
+        return getLikelyValue(average, err);
+    }
 
-	private static void calculate(final double l[]) {
-		final GaussianEstimator est = new GaussianEstimator();
-		for (final double v : l) {
-			est.addSample(v);
-		}
-		final double average = est.getAverage();
-		final double err = est.getLikelyError();
-		est.printStatistics(System.out, null);
+    @Override
+    public void printStatistics(final PrintStream s, final String lbl) {
+        final double stdDev = getStdDev();
+        final double err = getLikelyError();
+        if (lbl != null) {
+            s.print(lbl);
+            s.print(": ");
+        }
+        s.println("samples=" + sampleCount + " average=" + average + " stdDev="
+                + stdDev + " likely error=" + err);
+    }
 
-		System.out.print("  likely values:");
-		for (int i = 0; i < 15; i++) {
-			System.out.format(" %.3g", getLikelyValue(average, err));
-		}
-		System.out.println();
-	}
+    @Override
+    public String getStatisticsString() {
+        final double stdDev = getStdDev();
+        final double err = getLikelyError();
+        return "samples=" + sampleCount + " average=" + average + " stdDev="
+                + stdDev + " likely error=" + err;
+    }
 
-	public static void main(final String args[]) {
-		calculate(new double[] { 42.0 });
-		calculate(new double[] { 4, 9, 11, 12, 17, 5, 8, 12, 14 });
-		calculate(new double[] { 0, 0, 12, 12, 6 });
-		calculate(new double[] { 13.0, 17.1, 15.6, 22.1, 14.1, 11.2, 14.1,
-				12.4, 29.3 });
-		calculate(new double[] { 13.0, 17.1, 15.6, 22.1, 14.1, 11.2, 14.1,
-				12.4, 29.3, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5, 16.5,
-				16.5, 16.5, 16.5, 16.5, });
-	}
+    @Override
+    public String getName() {
+        return "gaussian";
+    }
 
-	@Override
-	public double getLikelyValue() {
-		final double err = getLikelyError();
-		return getLikelyValue(average, err);
-	}
+    @Override
+    public int getSampleCount() {
+        return sampleCount;
+    }
 
-	@Override
-	public void printStatistics(final PrintStream s, final String lbl) {
-		final double stdDev = getStdDev();
-		final double err = getLikelyError();
-		if (lbl != null) {
-			s.print(lbl);
-			s.print(": ");
-		}
-		s.println("samples=" + sampleCount + " average=" + average + " stdDev="
-				+ stdDev + " likely error=" + err);
-	}
+    @Override
+    public void setInitialEstimate(final Estimate timeEstimate) {
+        average = timeEstimate.getAverage();
+        S = timeEstimate.getVariance();
+        sampleCount = 1;
 
-	@Override
-	public String getName() {
-		return "gaussian";
-	}
+    }
 
-	@Override
-	public int getSampleCount() {
-		return sampleCount;
-	}
-
-	@Override
-	public void setInitialEstimate(final Estimate timeEstimate) {
-		average = timeEstimate.getMean();
-		S = timeEstimate.getVariance();
-		sampleCount = 1;
-
-	}
-
-	@Override
-	public Estimate getEstimate() {
-		return new Estimate(average, S / sampleCount);
-	}
+    @Override
+    public Estimate getEstimate() {
+        return new Estimate(average, S / sampleCount);
+    }
 }

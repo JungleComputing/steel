@@ -2,45 +2,98 @@ package ibis.steel;
 
 import java.io.Serializable;
 
+/**
+ * @author Kees van Reeuwijk
+ * 
+ */
 public class Estimate implements Serializable {
-	private static final long serialVersionUID = 1L;
-	public static final Estimate ZERO = new Estimate(0, 0);
-	private final double mean;
-	private final double variance;
+    private static final long serialVersionUID = 1L;
 
-	public Estimate(final double mean, final double variance) {
-		this.mean = mean;
-		this.variance = variance;
-	}
+    /**
+     * A constant representing zero average and variance.
+     */
+    public static final Estimate ZERO = new Estimate(0, 0);
+    private final double average;
+    private final double variance;
 
-	public Estimate addIndependent(final Estimate b) {
-		if (b == null) {
-			return null;
-		}
-		return new Estimate(getMean() + b.getMean(), getVariance()
-				+ b.getVariance());
-	}
+    /**
+     * Constructs a new estimate with the given average and variance.
+     * 
+     * @param mean
+     *            The average of the new estimate.
+     * @param variance
+     *            The variance of the new estimate.
+     */
+    public Estimate(final double mean, final double variance) {
+        this.average = mean;
+        this.variance = variance;
+    }
 
-	public Estimate multiply(final double c) {
-		return new Estimate(c * getMean(), c * c * getVariance());
-	}
+    /**
+     * Given another estimated value, that should be statistically independent
+     * of this one, returns a new estimate that represents the sum of this
+     * estimate and the other estimate.
+     * 
+     * @param other
+     *            The other estimated value.
+     * @return The sum of the two estimates.
+     */
+    public Estimate addIndependent(final Estimate other) {
+        if (other == null) {
+            return null;
+        }
+        return new Estimate(getAverage() + other.getAverage(), getVariance()
+                + other.getVariance());
+    }
 
-	public double getPessimisticEstimate() {
-		return getMean() + Math.sqrt(getVariance());
-	}
+    /**
+     * Given a constant value, returns a new estimate that is multiplied by this
+     * constant.
+     * 
+     * @param c
+     *            The constant to multiply with.
+     * @return The new, multiplied, constant.
+     */
+    public Estimate multiply(final double c) {
+        return new Estimate(c * getAverage(), c * c * getVariance());
+    }
 
-	public double getLikelyValue() {
-		// TODO: for low sample count the variation should be larger.
-		final double stdDev = Math.sqrt(getVariance());
+    /**
+     * Returns an estimate value that is likely to be too high.
+     * 
+     * @return The estimate value.
+     */
+    public double getHighEstimate() {
+        return average + Math.sqrt(getVariance());
+    }
 
-		return getMean() + stdDev * Globals.rng.nextGaussian();
-	}
+    /**
+     * Returns a random likely value for this estimate.
+     * 
+     * @return The likely value.
+     */
+    public double getLikelyValue() {
+        // TODO: for low sample count the variation should be larger.
+        final double stdDev = Math.sqrt(getVariance());
 
-	public double getMean() {
-		return mean;
-	}
+        return average + stdDev * Globals.rng.nextGaussian();
+    }
 
-	public double getVariance() {
-		return variance;
-	}
+    /**
+     * Returns the average of this estimate.
+     * 
+     * @return The average of this estimate.
+     */
+    public double getAverage() {
+        return average;
+    }
+
+    /**
+     * Returns the variance of this estimate.
+     * 
+     * @return The variance of this estimate.
+     */
+    public double getVariance() {
+        return variance;
+    }
 }
