@@ -1,7 +1,5 @@
 package ibis.steel;
 
-import java.io.PrintStream;
-
 /**
  * An estimator that assumes a log Gaussian distribution for the estimated
  * value. This distribution is particularly suitable for time estimates, since
@@ -12,54 +10,114 @@ import java.io.PrintStream;
  * 
  */
 public class LogGaussianEstimator implements Estimator {
-	GaussianEstimator logEstimator;
+    private static final long serialVersionUID = 1L;
+    private double logAverage = 0.0;
+    private double logS = 0.0;
+    private int sampleCount = 0;
 
-	@Override
-	public void setInitialEstimate(final Estimator est) {
-		final Estimator logEst = new Estimator(Math.log(est.getAverage()),
-				Math.log(est.getVariance()));
-		logEstimator.setInitialEstimate(logEst);
-	}
+    private LogGaussianEstimator(double logAverage, double logS, int sampleCount) {
+        this.logAverage = logAverage;
+        this.logS = logS;
+        this.sampleCount = sampleCount;
+    }
 
-	@Override
-	public double getLikelyValue() {
-		return Math.exp(logEstimator.getLikelyValue());
-	}
+    /**
+     * Constructs a new log-gaussian estimator with the given initial average
+     * and standard deviation.
+     * 
+     * @param average
+     *            The initial average.
+     * @param stdDev
+     *            The initial standard deviation.
+     */
+    public LogGaussianEstimator(double average, double stdDev) {
+        this(Math.log(average), 2 * Math.log(stdDev), 1);
+    }
 
-	@Override
-	public void printStatistics(final PrintStream s, final String lbl) {
-		logEstimator.printStatistics(s, lbl + "LOG");
-	}
+    private double getLogStdDev() {
+        return Math.sqrt(logS / sampleCount);
+    }
 
-	@Override
-	public void addSample(final double v) {
-		logEstimator.addSample(Math.log(v));
-	}
+    @Override
+    public double getLikelyValue() {
+        final double v = logAverage + getLogStdDev()
+                * Globals.rng.nextGaussian();
+        return Math.exp(v);
+    }
 
-	@Override
-	public String getName() {
-		return "log-gaussian";
-	}
+    @Override
+    public void addSample(final double v) {
+        final double value = Math.log(v);
+        sampleCount++;
+        final double oldAverage = logAverage;
+        logAverage += (value - logAverage) / sampleCount;
+        logS += (value - oldAverage) * (value - logAverage);
+    }
 
-	@Override
-	public double getHighEstimate() {
-		return Math.exp(logEstimator.getHighEstimate());
-	}
+    @Override
+    public String getName() {
+        return "log-gaussian";
+    }
 
-	@Override
-	public int getSampleCount() {
-		return logEstimator.getSampleCount();
-	}
+    @Override
+    public double getHighEstimate() {
+        final double stdDev = getLogStdDev();
+        final double logMax = logAverage + stdDev;
+        return Math.exp(logMax);
+    }
 
-	@Override
-	public Estimator getEstimate() {
-		return Math.exp(logEstimator.getEstimate());
-	}
+    @Override
+    public int getSampleCount() {
+        return sampleCount;
+    }
 
-	@Override
-	public String getStatisticsString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getStatisticsString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Estimator getEstimate() {
+        return new LogGaussianEstimator(logAverage, logS, sampleCount);
+    }
+
+    @Override
+    public Estimator addIndependent(Estimator est) {
+        if (est instanceof ConstantEstimator) {
+            final ConstantEstimator cest = (ConstantEstimator) est;
+            final double v = Math.exp(logAverage)
+                    + Math.exp(cest.getLikelyValue());
+            return new LogGaussianEstimator(Math.log(v), logS, sampleCount);
+        }
+        if (est instanceof LogGaussianEstimator) {
+            final LogGaussianEstimator lest = (LogGaussianEstimator) est;
+            final double v = Math.exp(logAverage) + Math.exp(lest.logAverage);
+            final double S = Math.exp(logS) + Math.exp(lest.logS);
+            return new LogGaussianEstimator(Math.log(v), Math.log(S), Math.min(
+                    sampleCount, lest.sampleCount));
+        }
+        throw new IllegalArgumentException(
+                "LogGaussianEstimator: cannot add a "
+                        + est.getClass().getName() + " estimator");
+    }
+
+    @Override
+    public Estimator multiply(double v) {
+        final double lv = Math.log(v);
+        return new LogGaussianEstimator(lv + logAverage, 2 * lv + logS,
+                sampleCount);
+    }
+
+    @Override
+    public String format() {
+        return String.format("%.3g~%.3g", Math.exp(logAverage),
+                Math.exp(0.5 * logS / sampleCount));
+    }
+
+    @Override
+    public double getAverage() {
+        return Math.exp(logAverage);
+    }
 
 }

@@ -1,66 +1,89 @@
 package ibis.steel;
 
-import java.io.PrintStream;
-
+/**
+ * An estimator that always estimates the same value. Mainly useful for
+ * constants such as ZERO.
+ * 
+ * @author Kees van Reeuwijk
+ * 
+ */
 public class ConstantEstimator implements Estimator {
-	private final double v;
+    private static final long serialVersionUID = 1L;
+    /**
+     * The constant estimate zero.
+     */
+    public static final ConstantEstimator ZERO = new ConstantEstimator(0.0);
+    private final double v;
 
-	public ConstantEstimator(final double v) {
-		this.v = v;
-	}
+    ConstantEstimator(final double v) {
+        this.v = v;
+    }
 
-	@Override
-	public double getLikelyValue() {
-		return v;
-	}
+    @Override
+    public double getLikelyValue() {
+        return v;
+    }
 
-	@Override
-	public void printStatistics(final PrintStream s, final String lbl) {
-		s.println(lbl + ": constant value " + v);
-	}
+    @Override
+    public void addSample(final double s) {
+        System.err.println("Adding a sample to a constant estimate is useless");
+    }
 
-	@Override
-	public void addSample(final double v) {
-		System.err.println("Adding a sample to a constant estimate is useless");
-	}
+    @Override
+    public String getName() {
+        return "constant";
+    }
 
-	@Override
-	public String getName() {
-		return "constant";
-	}
+    @Override
+    public double getHighEstimate() {
+        return v;
+    }
 
-	@Override
-	public double getHighEstimate() {
-		return v;
-	}
+    @Override
+    public int getSampleCount() {
+        return 1;
+    }
 
-	@Override
-	public int getSampleCount() {
-		return 1;
-	}
+    @Override
+    public Estimator getEstimate() {
+        return new ConstantEstimator(v);
+    }
 
-	@Override
-	public Estimator getEstimate() {
-		return new ConstantEstimator(v);
-	}
+    @Override
+    public String getStatisticsString() {
+        // TODO Auto-generated method stub
+        return "constant value " + v;
+    }
 
-	@Override
-	public String getStatisticsString() {
-		// TODO Auto-generated method stub
-		return "constant value " + v;
-	}
+    @Override
+    public Estimator addIndependent(final Estimator est) {
+        if (est == null) {
+            return null;
+        }
+        if (est instanceof ConstantEstimator) {
+            // Adding two constants creates another constant.
+            final ConstantEstimator cest = (ConstantEstimator) est;
+            return new ConstantEstimator(v + cest.v);
+        } else {
+            // Let the other one handle it.
+            return est.addIndependent(this);
+        }
+    }
 
-	@Override
-	public Estimator addIndependent(
-			final Estimator bestCompletionTimeAfterMasterQueue) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Estimator multiply(final double c) {
+        // TODO Auto-generated method stub
+        return new ConstantEstimator(c * v);
+    }
 
-	@Override
-	public Estimator multiply(final double i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String format() {
+        return String.format("%.3g", v);
+    }
+
+    @Override
+    public double getAverage() {
+        return v;
+    }
 
 }
