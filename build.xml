@@ -68,7 +68,7 @@
     </target>
 
     <!-- Clean up everything except the rewritten classlibs -->
-    <target name="clean" description="Clean up (leaves rewritten classlibs)">
+    <target name="clean" description="Clean up">
         <delete dir="tmp" />
         <delete dir="lib" />
         <delete dir="javadoc/steel" />
