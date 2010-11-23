@@ -76,7 +76,7 @@ public class LogGaussianEstimator implements Estimator {
 	public String getStatisticsString() {
 		final double stdDev = getLogStdDev();
 		final double rangeMin = Math.exp(logAverage - stdDev);
-		final double rangeMax = Math.exp(logAverage - stdDev);
+		final double rangeMax = Math.exp(logAverage + stdDev);
 		return String.format("average=%.3g range=%3g...%3g samples=%d",
 				Math.exp(logAverage), rangeMin, rangeMax, sampleCount);
 	}
