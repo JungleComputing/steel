@@ -6,7 +6,7 @@
     <target name="build" description="Build the steel library" depends="clean,compile-lib" />
 
     <!-- Names for generated directories. -->
-    <property name="javadoc" value="javadoc/ipl" />
+    <property name="javadoc" value="javadoc/steel" />
 
     <property name="version" value="0.1" />
     <property name="version-tag" value="-${version}" />
@@ -57,7 +57,7 @@
         <javac srcdir="src" destdir="tmp" debug="on" source="1.5" target="1.5">
         </javac>
 
-        <jar destfile="lib/ipl${version-tag}.jar">
+        <jar destfile="lib/ibis-steel${version-tag}.jar">
             <fileset dir="tmp" includes="ibis/steel/*.class" />
             <metainf dir="." includes="LICENSE.txt" />
         </jar>
@@ -74,7 +74,7 @@
         <delete dir="javadoc/steel" />
 
         <delete file="${sources-zip}" />
-        <delete file="ipl${version-tag}.zip" />
+        <delete file="ibis-steel${version-tag}.zip" />
     </target>
 
     <target name="compile" description="Build compile subproject">
