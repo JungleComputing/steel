@@ -77,8 +77,9 @@ public class LogGaussianEstimator implements Estimator {
         final double stdDev = getLogStdDev();
         final double rangeMin = Math.exp(logAverage - stdDev);
         final double rangeMax = Math.exp(logAverage + stdDev);
-        return String.format("average=%.3g range=%3g...%3g samples=%d",
-                Math.exp(logAverage), rangeMin, rangeMax, sampleCount);
+        return "average=" + Utils.formatNumber(Math.exp(logAverage))
+                + " range=" + Utils.formatNumber(rangeMin) + "..."
+                + Utils.formatNumber(rangeMax) + " samples=" + sampleCount;
     }
 
     @Override
@@ -115,8 +116,8 @@ public class LogGaussianEstimator implements Estimator {
 
     @Override
     public String format() {
-        return String.format("%.3g~%.3g", Math.exp(logAverage),
-                Math.exp(0.5 * logS / sampleCount));
+        return Utils.formatNumber(Math.exp(logAverage)) + "~"
+                + Utils.formatNumber(Math.exp(0.5 * logS / sampleCount));
     }
 
     @Override

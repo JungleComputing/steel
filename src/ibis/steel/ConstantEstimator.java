@@ -51,7 +51,7 @@ public class ConstantEstimator implements Estimator {
 
     @Override
     public String getStatisticsString() {
-        return "constant value " + v;
+        return "constant value " + Utils.formatNumber(v);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ConstantEstimator implements Estimator {
 
     @Override
     public String format() {
-        return String.format("%.3g", v);
+        return Utils.formatNumber(v);
     }
 
     @Override
