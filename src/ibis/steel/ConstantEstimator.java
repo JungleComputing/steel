@@ -51,7 +51,6 @@ public class ConstantEstimator implements Estimator {
 
     @Override
     public String getStatisticsString() {
-        // TODO Auto-generated method stub
         return "constant value " + v;
     }
 
@@ -72,7 +71,6 @@ public class ConstantEstimator implements Estimator {
 
     @Override
     public Estimator multiply(final double c) {
-        // TODO Auto-generated method stub
         return new ConstantEstimator(c * v);
     }
 
