@@ -19,7 +19,7 @@ class Utils {
             power3 -= 3;
         }
         final double m = v / Math.pow(10.0, power3);
-        final String fmt = neg ? "-%.2fE%d" : "%.2fE%d";
+        final String fmt = neg ? "-%.2fe%d" : "%.2fe%d";
         final String res = String.format(fmt, m, power3);
         return res;
     }
