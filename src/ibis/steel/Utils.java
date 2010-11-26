@@ -15,7 +15,6 @@ class Utils {
             power -= 1;
         }
         int power3 = power - (power % 3);
-        System.out.print("power=" + power + " power3=" + power3 + " ");
         if (power3 > power) {
             power3 -= 3;
         }
