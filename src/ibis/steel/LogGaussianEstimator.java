@@ -89,6 +89,9 @@ public class LogGaussianEstimator implements Estimator {
 
     @Override
     public Estimator addIndependent(final Estimator est) {
+        if (est == null) {
+            return null;
+        }
         if (est instanceof ConstantEstimator) {
             final ConstantEstimator cest = (ConstantEstimator) est;
             final double v = Math.exp(logAverage)

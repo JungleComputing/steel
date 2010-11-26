@@ -18,7 +18,7 @@ public class GaussianEstimator implements Estimator {
     private GaussianEstimator(final double average, final double variance,
             final int sampleCount) {
         this.average = average;
-        this.S = variance * sampleCount;
+        S = variance * sampleCount;
         this.sampleCount = sampleCount;
     }
 
@@ -97,6 +97,9 @@ public class GaussianEstimator implements Estimator {
 
     @Override
     public Estimator addIndependent(final Estimator est) {
+        if (est == null) {
+            return null;
+        }
         if (est instanceof ConstantEstimator) {
             final ConstantEstimator cest = (ConstantEstimator) est;
             return new GaussianEstimator(average + cest.getLikelyValue(), S,

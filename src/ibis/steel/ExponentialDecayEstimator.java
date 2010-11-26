@@ -99,6 +99,9 @@ public class ExponentialDecayEstimator implements Estimator {
 
     @Override
     public Estimator addIndependent(final Estimator est) {
+        if (est == null) {
+            return null;
+        }
         if (est instanceof ConstantEstimator) {
             final ConstantEstimator cest = (ConstantEstimator) est;
             return new ExponentialDecayEstimator(average
