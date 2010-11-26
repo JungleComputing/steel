@@ -24,12 +24,13 @@ public class ExponentialDecayLogEstimator implements Estimator {
         this.sampleCount = sampleCount;
     }
 
-    ExponentialDecayLogEstimator(final double average, final double variance,
-            final double alpha) {
+    public ExponentialDecayLogEstimator(final double average,
+            final double variance, final double alpha) {
         this(average, variance, alpha, 1);
     }
 
-    ExponentialDecayLogEstimator(final double average, final double variance) {
+    public ExponentialDecayLogEstimator(final double average,
+            final double variance) {
         this(average, variance, 0.2, 1);
     }
 
