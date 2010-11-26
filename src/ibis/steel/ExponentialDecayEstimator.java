@@ -16,29 +16,21 @@ public class ExponentialDecayEstimator implements Estimator {
     private final double alpha;
     private int sampleCount = 0;
 
-    /**
-     * Constructs a new exponential decay estimator with the given decay factor.
-     * 
-     * @param alpha
-     *            The decay factor to use.
-     */
-    public ExponentialDecayEstimator(final double alpha) {
-        this.alpha = alpha;
-    }
-
-    /**
-     * Constructs a new exponential decay estimator with the decay factor 0.25.
-     */
-    public ExponentialDecayEstimator() {
-        this(0.0, 0.0, 0.25, 0);
-    }
-
-    ExponentialDecayEstimator(final double average, final double variance,
-            final double alpha, final int sampleCount) {
+    private ExponentialDecayEstimator(final double average,
+            final double variance, final double alpha, final int sampleCount) {
         this.average = average;
         this.variance = variance;
         this.alpha = alpha;
         this.sampleCount = sampleCount;
+    }
+
+    ExponentialDecayEstimator(final double average, final double variance,
+            final double alpha) {
+        this(average, variance, alpha, 1);
+    }
+
+    ExponentialDecayEstimator(final double average, final double variance) {
+        this(average, variance, 0.2, 1);
     }
 
     @Override
