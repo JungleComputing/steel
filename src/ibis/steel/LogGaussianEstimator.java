@@ -83,38 +83,8 @@ public class LogGaussianEstimator implements Estimator {
     }
 
     @Override
-    public Estimator getEstimate() {
-        return new LogGaussianEstimator(logAverage, logS, sampleCount);
-    }
-
-    @Override
-    public Estimator addIndependent(final Estimator est) {
-        if (est == null) {
-            return null;
-        }
-        if (est instanceof ConstantEstimator) {
-            final ConstantEstimator cest = (ConstantEstimator) est;
-            final double v = Math.exp(logAverage)
-                    + Math.exp(cest.getLikelyValue());
-            return new LogGaussianEstimator(Math.log(v), logS, sampleCount);
-        }
-        if (est instanceof LogGaussianEstimator) {
-            final LogGaussianEstimator lest = (LogGaussianEstimator) est;
-            final double v = Math.exp(logAverage) + Math.exp(lest.logAverage);
-            final double S = Math.exp(logS) + Math.exp(lest.logS);
-            return new LogGaussianEstimator(Math.log(v), Math.log(S), Math.min(
-                    sampleCount, lest.sampleCount));
-        }
-        throw new IllegalArgumentException(
-                "LogGaussianEstimator: cannot add a "
-                        + est.getClass().getName() + " estimator");
-    }
-
-    @Override
-    public Estimator multiply(final double v) {
-        final double lv = Math.log(v);
-        return new LogGaussianEstimator(lv + logAverage, 2 * lv + logS,
-                sampleCount);
+    public Estimate getEstimate() {
+        return new LogGaussianEstimate(logAverage, logS / sampleCount);
     }
 
     @Override

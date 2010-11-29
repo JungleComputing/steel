@@ -87,39 +87,13 @@ public class ExponentialDecayEstimator implements Estimator {
     }
 
     @Override
-    public Estimator getEstimate() {
-        return new ExponentialDecayEstimator(average, variance, alpha,
-                sampleCount);
+    public Estimate getEstimate() {
+        return new GaussianEstimate(average, variance);
     }
 
     @Override
     public String getStatisticsString() {
         return toString();
-    }
-
-    @Override
-    public Estimator addIndependent(final Estimator est) {
-        if (est == null) {
-            return null;
-        }
-        if (est instanceof ConstantEstimator) {
-            final ConstantEstimator cest = (ConstantEstimator) est;
-            return new ExponentialDecayEstimator(average
-                    + cest.getLikelyValue(), variance, alpha, sampleCount);
-        } else if (est instanceof ExponentialDecayEstimator) {
-            final ExponentialDecayEstimator gest = (ExponentialDecayEstimator) est;
-            return new ExponentialDecayEstimator(average + gest.average,
-                    variance + gest.variance, alpha, Math.min(sampleCount,
-                            gest.sampleCount));
-        }
-        throw new IllegalArgumentException("GaussianEstimator: cannot add a "
-                + est.getClass().getName() + " estimator");
-    }
-
-    @Override
-    public Estimator multiply(final double c) {
-        return new ExponentialDecayEstimator(c * average, c * c * variance,
-                alpha, sampleCount);
     }
 
     @Override

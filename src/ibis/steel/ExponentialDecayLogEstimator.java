@@ -84,9 +84,8 @@ public class ExponentialDecayLogEstimator implements Estimator {
     }
 
     @Override
-    public Estimator getEstimate() {
-        return new ExponentialDecayLogEstimator(logAverage, logVariance, alpha,
-                sampleCount);
+    public Estimate getEstimate() {
+        return new LogGaussianEstimate(logAverage, logVariance);
     }
 
     @Override
@@ -97,37 +96,6 @@ public class ExponentialDecayLogEstimator implements Estimator {
         return "average=" + Utils.formatNumber(Math.exp(logAverage))
                 + " range=" + Utils.formatNumber(rangeMin) + "..."
                 + Utils.formatNumber(rangeMax) + " samples=" + sampleCount;
-    }
-
-    @Override
-    public Estimator addIndependent(final Estimator est) {
-        if (est == null) {
-            return null;
-        }
-        if (est instanceof ConstantEstimator) {
-            final ConstantEstimator cest = (ConstantEstimator) est;
-            final double v = Math.exp(logAverage)
-                    + Math.exp(cest.getLikelyValue());
-            return new ExponentialDecayLogEstimator(Math.log(v), logVariance,
-                    alpha, sampleCount);
-        } else if (est instanceof ExponentialDecayLogEstimator) {
-            final ExponentialDecayLogEstimator lest = (ExponentialDecayLogEstimator) est;
-            final double av = Math.exp(logAverage) + Math.exp(lest.logAverage);
-            final double var = Math.exp(logVariance)
-                    + Math.exp(lest.logVariance);
-            return new ExponentialDecayLogEstimator(Math.log(av),
-                    Math.log(var), alpha, Math.min(sampleCount,
-                            lest.sampleCount));
-        }
-        throw new IllegalArgumentException("GaussianEstimator: cannot add a "
-                + est.getClass().getName() + " estimator");
-    }
-
-    @Override
-    public Estimator multiply(final double c) {
-        final double lc = Math.log(c);
-        return new ExponentialDecayLogEstimator(lc + logAverage, 2 * lc
-                + logVariance, alpha, sampleCount);
     }
 
     @Override

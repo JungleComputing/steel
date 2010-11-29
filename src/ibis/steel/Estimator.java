@@ -1,14 +1,12 @@
 package ibis.steel;
 
-import java.io.Serializable;
-
 /**
  * The interface of an estimator.
  * 
  * @author Kees van Reeuwijk
  * 
  */
-public interface Estimator extends Serializable {
+public interface Estimator {
 
     /**
      * Based on the current data, return a likely value for a next sample. The
@@ -53,11 +51,9 @@ public interface Estimator extends Serializable {
      * variance on the estimate. Contrary to the estimator itself, the estimate
      * cannot be updated with new samples, but it is suitable for communication.
      * 
-     * TODO: rename getEstimate() to a cloning function.
-     * 
      * @return The estimate.
      */
-    Estimator getEstimate();
+    Estimate getEstimate();
 
     /**
      * Returns a string with some statistics of this estimator.
@@ -66,12 +62,10 @@ public interface Estimator extends Serializable {
      */
     String getStatisticsString();
 
-    Estimator addIndependent(Estimator est);
-
-    Estimator multiply(double v);
-
     String format();
 
     double getAverage();
+
+    void setInitialValue(Estimate estimate);
 
 }

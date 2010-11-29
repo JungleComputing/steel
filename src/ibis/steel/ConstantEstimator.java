@@ -45,33 +45,13 @@ public class ConstantEstimator implements Estimator {
     }
 
     @Override
-    public Estimator getEstimate() {
-        return new ConstantEstimator(v);
+    public Estimate getEstimate() {
+        return new ConstantEstimate(v);
     }
 
     @Override
     public String getStatisticsString() {
         return "constant value " + Utils.formatNumber(v);
-    }
-
-    @Override
-    public Estimator addIndependent(final Estimator est) {
-        if (est == null) {
-            return null;
-        }
-        if (est instanceof ConstantEstimator) {
-            // Adding two constants creates another constant.
-            final ConstantEstimator cest = (ConstantEstimator) est;
-            return new ConstantEstimator(v + cest.v);
-        } else {
-            // Let the other one handle it.
-            return est.addIndependent(this);
-        }
-    }
-
-    @Override
-    public Estimator multiply(final double c) {
-        return new ConstantEstimator(c * v);
     }
 
     @Override

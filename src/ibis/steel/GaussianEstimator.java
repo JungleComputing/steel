@@ -91,31 +91,8 @@ public class GaussianEstimator implements Estimator {
     }
 
     @Override
-    public Estimator getEstimate() {
-        return new GaussianEstimator(average, S / sampleCount);
-    }
-
-    @Override
-    public Estimator addIndependent(final Estimator est) {
-        if (est == null) {
-            return null;
-        }
-        if (est instanceof ConstantEstimator) {
-            final ConstantEstimator cest = (ConstantEstimator) est;
-            return new GaussianEstimator(average + cest.getLikelyValue(), S,
-                    sampleCount);
-        } else if (est instanceof GaussianEstimator) {
-            final GaussianEstimator gest = (GaussianEstimator) est;
-            return new GaussianEstimator(average + gest.average, S + gest.S,
-                    Math.min(sampleCount, gest.sampleCount));
-        }
-        throw new IllegalArgumentException("GaussianEstimator: cannot add a "
-                + est.getClass().getName() + " estimator");
-    }
-
-    @Override
-    public Estimator multiply(final double c) {
-        return new GaussianEstimator(c * average, c * c * S, sampleCount);
+    public Estimate getEstimate() {
+        return new GaussianEstimate(average, S / sampleCount);
     }
 
     @Override
