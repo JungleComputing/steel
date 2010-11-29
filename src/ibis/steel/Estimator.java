@@ -66,6 +66,4 @@ public interface Estimator {
 
     double getAverage();
 
-    void setInitialValue(Estimate estimate);
-
 }

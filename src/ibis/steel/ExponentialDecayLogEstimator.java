@@ -29,9 +29,26 @@ public class ExponentialDecayLogEstimator implements Estimator {
         this(average, variance, alpha, 1);
     }
 
-    public ExponentialDecayLogEstimator(final double average,
-            final double variance) {
-        this(average, variance, 0.2, 1);
+    public ExponentialDecayLogEstimator(final Estimate est, final double alpha) {
+        this.alpha = alpha;
+        this.sampleCount = 1;
+        if (est instanceof ConstantEstimate) {
+            final ConstantEstimate cest = (ConstantEstimate) est;
+            logAverage = Math.log(cest.getAverage());
+            logVariance = Math.log(10);
+        } else if (est instanceof GaussianEstimate) {
+            final GaussianEstimate gest = (GaussianEstimate) est;
+            logAverage = Math.log(gest.average);
+            logVariance = Math.log(gest.variance);
+        } else if (est instanceof LogGaussianEstimate) {
+            final LogGaussianEstimate gest = (LogGaussianEstimate) est;
+            logAverage = Math.log(gest.logAverage);
+            logVariance = Math.log(gest.logVariance);
+        } else {
+            throw new IllegalArgumentException(
+                    "ExponentialDecayLogEstimator: cannot initialize with a "
+                            + est.getClass().getName() + " estimate");
+        }
     }
 
     @Override
@@ -85,7 +102,7 @@ public class ExponentialDecayLogEstimator implements Estimator {
 
     @Override
     public Estimate getEstimate() {
-        return new LogGaussianEstimate(logAverage, logVariance);
+        return new LogGaussianEstimate(logAverage, logVariance, sampleCount);
     }
 
     @Override

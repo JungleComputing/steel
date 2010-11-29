@@ -84,7 +84,8 @@ public class LogGaussianEstimator implements Estimator {
 
     @Override
     public Estimate getEstimate() {
-        return new LogGaussianEstimate(logAverage, logS / sampleCount);
+        return new LogGaussianEstimate(logAverage, logS / sampleCount,
+                sampleCount);
     }
 
     @Override

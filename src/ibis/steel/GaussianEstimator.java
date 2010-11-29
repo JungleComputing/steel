@@ -51,11 +51,6 @@ public class GaussianEstimator implements Estimator {
         return stdDev + 0.1 * average / Math.sqrt(sampleCount);
     }
 
-    private static double getLikelyValue(final double average,
-            final double stdDev) {
-        return average + stdDev * Globals.rng.nextGaussian();
-    }
-
     @Override
     public double getHighEstimate() {
         if (sampleCount < 1) {
@@ -67,7 +62,7 @@ public class GaussianEstimator implements Estimator {
     @Override
     public double getLikelyValue() {
         final double err = getLikelyError();
-        return getLikelyValue(average, err);
+        return average + err * Globals.rng.nextGaussian();
     }
 
     @Override
@@ -92,7 +87,7 @@ public class GaussianEstimator implements Estimator {
 
     @Override
     public Estimate getEstimate() {
-        return new GaussianEstimate(average, S / sampleCount);
+        return new GaussianEstimate(average, S / sampleCount, sampleCount);
     }
 
     @Override

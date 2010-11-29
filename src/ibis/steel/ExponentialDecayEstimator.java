@@ -88,7 +88,7 @@ public class ExponentialDecayEstimator implements Estimator {
 
     @Override
     public Estimate getEstimate() {
-        return new GaussianEstimate(average, variance);
+        return new GaussianEstimate(average, variance, sampleCount);
     }
 
     @Override

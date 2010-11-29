@@ -1,11 +1,13 @@
 package ibis.steel;
 
 public class ConstantEstimate implements Estimate {
+    private static final long serialVersionUID = 1L;
+
     private final double v;
 
     public static final ConstantEstimate ZERO = new ConstantEstimate(0.0);
 
-    ConstantEstimate(double v) {
+    ConstantEstimate(final double v) {
         this.v = v;
     }
 
@@ -18,10 +20,9 @@ public class ConstantEstimate implements Estimate {
             // Adding two constants creates another constant.
             final ConstantEstimate cest = (ConstantEstimate) est;
             return new ConstantEstimate(v + cest.v);
-        } else {
-            // Let the other one handle it.
-            return est.addIndependent(this);
         }
+        // Let the other one handle it.
+        return est.addIndependent(this);
     }
 
     @Override

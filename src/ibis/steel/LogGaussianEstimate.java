@@ -1,13 +1,16 @@
 package ibis.steel;
 
 public class LogGaussianEstimate implements Estimate {
-    private final double logAverage;
-    private final double logVariance;
+    private static final long serialVersionUID = 1L;
+    final double logAverage;
+    final double logVariance;
+    private final int sampleCount;
 
-    LogGaussianEstimate(double average, double variance) {
-        super();
+    LogGaussianEstimate(final double average, final double variance,
+            final int sampleCount) {
         this.logAverage = average;
         this.logVariance = variance;
+        this.sampleCount = sampleCount;
     }
 
     @Override
@@ -19,13 +22,15 @@ public class LogGaussianEstimate implements Estimate {
             final ConstantEstimator cest = (ConstantEstimator) est;
             final double v = Math.exp(logAverage)
                     + Math.exp(cest.getLikelyValue());
-            return new LogGaussianEstimate(Math.log(v), logVariance);
+            return new LogGaussianEstimate(Math.log(v), logVariance,
+                    sampleCount);
         } else if (est instanceof LogGaussianEstimate) {
             final LogGaussianEstimate lest = (LogGaussianEstimate) est;
             final double av = Math.exp(logAverage) + Math.exp(lest.logAverage);
             final double var = Math.exp(logVariance)
                     + Math.exp(lest.logVariance);
-            return new LogGaussianEstimate(Math.log(av), Math.log(var));
+            return new LogGaussianEstimate(Math.log(av), Math.log(var),
+                    Math.min(sampleCount, lest.sampleCount));
         }
         throw new IllegalArgumentException("GaussianEstimator: cannot add a "
                 + est.getClass().getName() + " estimator");
@@ -34,7 +39,8 @@ public class LogGaussianEstimate implements Estimate {
     @Override
     public Estimate multiply(final double c) {
         final double lc = Math.log(c);
-        return new LogGaussianEstimate(lc + logAverage, 2 * lc + logVariance);
+        return new LogGaussianEstimate(lc + logAverage, 2 * lc + logVariance,
+                sampleCount);
     }
 
     @Override
@@ -46,5 +52,23 @@ public class LogGaussianEstimate implements Estimate {
     @Override
     public double getAverage() {
         return Math.exp(logAverage);
+    }
+
+    private double getLogStdDev() {
+        return Math.sqrt(logVariance);
+    }
+
+    @Override
+    public double getLikelyValue() {
+        final double v = logAverage + getLogStdDev()
+                * Globals.rng.nextGaussian();
+        return Math.exp(v);
+    }
+
+    @Override
+    public double getHighEstimate() {
+        final double stdDev = getLogStdDev();
+        final double logMax = logAverage + stdDev;
+        return Math.exp(logMax);
     }
 }
