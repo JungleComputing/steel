@@ -24,11 +24,28 @@ public class ExponentialDecayLogEstimator implements Estimator {
         this.sampleCount = sampleCount;
     }
 
+    /**
+     * Constructs a new exponential decay estimator with a log-gaussian
+     * probability model. Use the given log
+     * 
+     * @param average
+     * @param variance
+     * @param alpha
+     *            The decay factor of the estimator.
+     */
     public ExponentialDecayLogEstimator(final double average,
             final double variance, final double alpha) {
         this(average, variance, alpha, 1);
     }
 
+    /**
+     * Constructs a new estimator with the given estimate as initial sample.
+     * 
+     * @param est
+     *            The estimate to use as sample.
+     * @param alpha
+     *            The decay factor of the estimator.
+     */
     public ExponentialDecayLogEstimator(final Estimate est, final double alpha) {
         this.alpha = alpha;
         if (est instanceof ConstantEstimate) {
