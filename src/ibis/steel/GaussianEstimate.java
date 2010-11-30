@@ -18,12 +18,16 @@ public class GaussianEstimate implements Estimate {
         if (est == null) {
             return null;
         }
+        if (est instanceof ConstantEstimate) {
+            final ConstantEstimate ce = (ConstantEstimate) est;
+            return new GaussianEstimate(ce.v + average, variance, sampleCount);
+        }
         if (est instanceof GaussianEstimate) {
             final GaussianEstimate gest = (GaussianEstimate) est;
             return new GaussianEstimate(average + gest.average, variance
                     + gest.variance, Math.min(sampleCount, gest.sampleCount));
         }
-        throw new IllegalArgumentException("GaussianEstimator: cannot add a "
+        throw new IllegalArgumentException("GaussianEstimate: cannot add a "
                 + est.getClass().getName() + " estimator");
     }
 

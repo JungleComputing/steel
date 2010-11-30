@@ -18,6 +18,12 @@ public class LogGaussianEstimate implements Estimate {
         if (est == null) {
             return null;
         }
+        if (est instanceof ConstantEstimate) {
+            final ConstantEstimate ce = (ConstantEstimate) est;
+            final double av = ce.v + Math.exp(logAverage);
+            return new LogGaussianEstimate(Math.log(av), logVariance,
+                    sampleCount);
+        }
         if (est instanceof LogGaussianEstimate) {
             final LogGaussianEstimate lest = (LogGaussianEstimate) est;
             final double av = Math.exp(logAverage) + Math.exp(lest.logAverage);
@@ -26,7 +32,7 @@ public class LogGaussianEstimate implements Estimate {
             return new LogGaussianEstimate(Math.log(av), Math.log(var),
                     Math.min(sampleCount, lest.sampleCount));
         }
-        throw new IllegalArgumentException("GaussianEstimator: cannot add a "
+        throw new IllegalArgumentException("LogGaussianEstimate: cannot add a "
                 + est.getClass().getName() + " estimator");
     }
 
