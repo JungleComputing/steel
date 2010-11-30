@@ -69,10 +69,9 @@ public class GaussianEstimator implements Estimator {
     public String getStatisticsString() {
         final double stdDev = getStdDev();
         final double err = getLikelyError();
-        return "samples=" + sampleCount + " average="
-                + Utils.formatNumber(average) + " stdDev="
+        return "average=" + Utils.formatNumber(average) + " stdDev="
                 + Utils.formatNumber(stdDev) + " likely error="
-                + Utils.formatNumber(err);
+                + Utils.formatNumber(err) + " samples=" + sampleCount;
     }
 
     @Override

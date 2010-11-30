@@ -33,6 +33,30 @@ public class ExponentialDecayEstimator implements Estimator {
         this(average, variance, 0.2, 1);
     }
 
+    public ExponentialDecayEstimator(final Estimate est, double alpha) {
+        this.alpha = alpha;
+        if (est instanceof ConstantEstimate) {
+            final ConstantEstimate cest = (ConstantEstimate) est;
+            average = Math.log(cest.v);
+            variance = Math.log(10);
+            this.sampleCount = 1;
+        } else if (est instanceof GaussianEstimate) {
+            final GaussianEstimate gest = (GaussianEstimate) est;
+            average = gest.average;
+            variance = gest.variance;
+            this.sampleCount = gest.sampleCount;
+        } else if (est instanceof LogGaussianEstimate) {
+            final LogGaussianEstimate gest = (LogGaussianEstimate) est;
+            average = Math.exp(gest.logAverage);
+            variance = Math.exp(gest.logVariance);
+            this.sampleCount = gest.sampleCount;
+        } else {
+            throw new IllegalArgumentException(
+                    "ExponentialDecayEstimator: cannot initialize with a "
+                            + est.getClass().getName() + " estimate");
+        }
+    }
+
     @Override
     public void addSample(final double x) {
         final double diff = x - average;
@@ -80,10 +104,9 @@ public class ExponentialDecayEstimator implements Estimator {
     public String toString() {
         final double stdDev = Math.sqrt(variance);
         final double err = getLikelyError();
-        return "samples=" + sampleCount + " average="
-                + Utils.formatNumber(average) + " stdDev="
+        return "average=" + Utils.formatNumber(average) + " stdDev="
                 + Utils.formatNumber(stdDev) + " likely error="
-                + Utils.formatNumber(err);
+                + Utils.formatNumber(err) + " samples=" + sampleCount;
     }
 
     @Override

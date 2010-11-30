@@ -31,19 +31,21 @@ public class ExponentialDecayLogEstimator implements Estimator {
 
     public ExponentialDecayLogEstimator(final Estimate est, final double alpha) {
         this.alpha = alpha;
-        this.sampleCount = 1;
         if (est instanceof ConstantEstimate) {
             final ConstantEstimate cest = (ConstantEstimate) est;
-            logAverage = Math.log(cest.getAverage());
+            logAverage = Math.log(cest.v);
             logVariance = Math.log(10);
+            this.sampleCount = 1;
         } else if (est instanceof GaussianEstimate) {
             final GaussianEstimate gest = (GaussianEstimate) est;
             logAverage = Math.log(gest.average);
             logVariance = Math.log(gest.variance);
+            this.sampleCount = gest.sampleCount;
         } else if (est instanceof LogGaussianEstimate) {
             final LogGaussianEstimate gest = (LogGaussianEstimate) est;
-            logAverage = Math.log(gest.logAverage);
-            logVariance = Math.log(gest.logVariance);
+            logAverage = gest.logAverage;
+            logVariance = gest.logVariance;
+            this.sampleCount = gest.sampleCount;
         } else {
             throw new IllegalArgumentException(
                     "ExponentialDecayLogEstimator: cannot initialize with a "

@@ -4,7 +4,7 @@ public class LogGaussianEstimate implements Estimate {
     private static final long serialVersionUID = 1L;
     final double logAverage;
     final double logVariance;
-    private final int sampleCount;
+    final int sampleCount;
 
     LogGaussianEstimate(final double average, final double variance,
             final int sampleCount) {
@@ -49,8 +49,7 @@ public class LogGaussianEstimate implements Estimate {
                 + Utils.formatNumber(Math.exp(0.5 * logVariance));
     }
 
-    @Override
-    public double getAverage() {
+    private double getAverage() {
         return Math.exp(logAverage);
     }
 

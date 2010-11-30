@@ -4,7 +4,7 @@ public class GaussianEstimate implements Estimate {
     private static final long serialVersionUID = 1L;
     protected final double average;
     protected final double variance;
-    private final int sampleCount;
+    final int sampleCount;
 
     public GaussianEstimate(final double average, final double variance,
             final int sampleCount) {
@@ -62,8 +62,7 @@ public class GaussianEstimate implements Estimate {
         return average + Math.sqrt(variance);
     }
 
-    @Override
-    public double getAverage() {
+    private double getAverage() {
         return average;
     }
 }
