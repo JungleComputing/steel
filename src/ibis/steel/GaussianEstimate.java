@@ -18,11 +18,7 @@ public class GaussianEstimate implements Estimate {
         if (est == null) {
             return null;
         }
-        if (est instanceof ConstantEstimator) {
-            final ConstantEstimator cest = (ConstantEstimator) est;
-            return new GaussianEstimate(average + cest.getLikelyValue(),
-                    variance, sampleCount);
-        } else if (est instanceof GaussianEstimate) {
+        if (est instanceof GaussianEstimate) {
             final GaussianEstimate gest = (GaussianEstimate) est;
             return new GaussianEstimate(average + gest.average, variance
                     + gest.variance, Math.min(sampleCount, gest.sampleCount));

@@ -64,6 +64,4 @@ public interface Estimator {
 
     String format();
 
-    double getAverage();
-
 }

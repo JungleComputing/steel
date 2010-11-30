@@ -94,9 +94,4 @@ public class LogGaussianEstimator implements Estimator {
                 + Utils.formatNumber(Math.exp(0.5 * logS / sampleCount));
     }
 
-    @Override
-    public double getAverage() {
-        return Math.exp(logAverage);
-    }
-
 }

@@ -18,13 +18,7 @@ public class LogGaussianEstimate implements Estimate {
         if (est == null) {
             return null;
         }
-        if (est instanceof ConstantEstimate) {
-            final ConstantEstimator cest = (ConstantEstimator) est;
-            final double v = Math.exp(logAverage)
-                    + Math.exp(cest.getLikelyValue());
-            return new LogGaussianEstimate(Math.log(v), logVariance,
-                    sampleCount);
-        } else if (est instanceof LogGaussianEstimate) {
+        if (est instanceof LogGaussianEstimate) {
             final LogGaussianEstimate lest = (LogGaussianEstimate) est;
             final double av = Math.exp(logAverage) + Math.exp(lest.logAverage);
             final double var = Math.exp(logVariance)

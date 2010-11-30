@@ -123,8 +123,4 @@ public class ExponentialDecayLogEstimator implements Estimator {
                 + Utils.formatNumber(Math.exp(0.5 * logVariance));
     }
 
-    @Override
-    public double getAverage() {
-        return Math.exp(logAverage);
-    }
 }

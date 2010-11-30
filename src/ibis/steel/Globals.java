@@ -4,5 +4,5 @@ import java.util.Random;
 
 class Globals {
 
-	public static Random rng = new Random();
+    final static Random rng = new Random();
 }

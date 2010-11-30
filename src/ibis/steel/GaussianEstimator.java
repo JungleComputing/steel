@@ -95,8 +95,4 @@ public class GaussianEstimator implements Estimator {
                 + Utils.formatNumber(getStdDev());
     }
 
-    @Override
-    public double getAverage() {
-        return average;
-    }
 }

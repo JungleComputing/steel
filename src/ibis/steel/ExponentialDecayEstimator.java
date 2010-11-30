@@ -125,8 +125,4 @@ public class ExponentialDecayEstimator implements Estimator {
                 + Utils.formatNumber(Math.sqrt(variance));
     }
 
-    @Override
-    public double getAverage() {
-        return average;
-    }
 }
