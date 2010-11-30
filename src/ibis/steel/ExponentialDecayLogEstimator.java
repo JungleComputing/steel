@@ -65,9 +65,6 @@ public class ExponentialDecayLogEstimator implements Estimator {
 
     @Override
     public double getHighEstimate() {
-        if (sampleCount < 2) {
-            return Double.POSITIVE_INFINITY;
-        }
         return Math.exp(logAverage) + Math.exp(0.5 * logVariance);
     }
 

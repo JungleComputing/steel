@@ -39,9 +39,6 @@ public class GaussianEstimator implements Estimator {
     }
 
     private double getStdDev() {
-        if (sampleCount < 1) {
-            return Double.POSITIVE_INFINITY;
-        }
         return Math.sqrt(S / sampleCount);
     }
 
@@ -53,9 +50,6 @@ public class GaussianEstimator implements Estimator {
 
     @Override
     public double getHighEstimate() {
-        if (sampleCount < 1) {
-            return Double.POSITIVE_INFINITY;
-        }
         return average + Math.sqrt(S / sampleCount);
     }
 

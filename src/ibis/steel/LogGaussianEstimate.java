@@ -33,7 +33,7 @@ public class LogGaussianEstimate implements Estimate {
                     Math.min(sampleCount, lest.sampleCount));
         }
         throw new IllegalArgumentException("LogGaussianEstimate: cannot add a "
-                + est.getClass().getName() + " estimator");
+                + est.getClass().getName() + " estimate");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class LogGaussianEstimate implements Estimate {
     }
 
     @Override
-    public String format() {
+    public String toString() {
         return Utils.formatNumber(Math.exp(logAverage)) + "~"
                 + Utils.formatNumber(Math.exp(0.5 * logVariance));
     }

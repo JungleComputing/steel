@@ -65,7 +65,7 @@ public class ConstantEstimate implements Estimate {
     }
 
     @Override
-    public String format() {
+    public String toString() {
         return Utils.formatNumber(v);
     }
 }

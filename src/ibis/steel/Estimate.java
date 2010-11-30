@@ -33,13 +33,6 @@ public interface Estimate extends Serializable {
     Estimate multiply(double v);
 
     /**
-     * Returns a neatly formatted representation of this estimate.
-     * 
-     * @return The formatted representation of this estimate.
-     */
-    String format();
-
-    /**
      * Returns a random but likely value for this estimate.
      * 
      * @return A likely value for this estimate.

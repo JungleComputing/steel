@@ -28,7 +28,7 @@ public class GaussianEstimate implements Estimate {
                     + gest.variance, Math.min(sampleCount, gest.sampleCount));
         }
         throw new IllegalArgumentException("GaussianEstimate: cannot add a "
-                + est.getClass().getName() + " estimator");
+                + est.getClass().getName() + " estimate");
     }
 
     @Override
@@ -37,7 +37,7 @@ public class GaussianEstimate implements Estimate {
     }
 
     @Override
-    public String format() {
+    public String toString() {
         return Utils.formatNumber(average) + "\u00B1"
                 + Utils.formatNumber(Math.sqrt(variance));
     }
@@ -56,9 +56,6 @@ public class GaussianEstimate implements Estimate {
 
     @Override
     public double getHighEstimate() {
-        if (sampleCount < 1) {
-            return Double.POSITIVE_INFINITY;
-        }
         return average + Math.sqrt(variance);
     }
 }

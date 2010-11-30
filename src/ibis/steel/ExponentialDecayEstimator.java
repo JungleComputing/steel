@@ -33,7 +33,7 @@ public class ExponentialDecayEstimator implements Estimator {
         this(average, variance, 0.2, 1);
     }
 
-    public ExponentialDecayEstimator(final Estimate est, double alpha) {
+    public ExponentialDecayEstimator(final Estimate est, final double alpha) {
         this.alpha = alpha;
         if (est instanceof ConstantEstimate) {
             final ConstantEstimate cest = (ConstantEstimate) est;
@@ -68,9 +68,6 @@ public class ExponentialDecayEstimator implements Estimator {
 
     @Override
     public double getHighEstimate() {
-        if (sampleCount < 2) {
-            return Double.POSITIVE_INFINITY;
-        }
         return average + Math.sqrt(variance);
     }
 

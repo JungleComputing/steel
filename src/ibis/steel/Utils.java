@@ -2,11 +2,17 @@ package ibis.steel;
 
 class Utils {
     static String formatNumber(double v) {
+        if (v == Double.POSITIVE_INFINITY) {
+            return "infinite";
+        }
+        if (v == Double.NEGATIVE_INFINITY) {
+            return "-infinite";
+        }
         final boolean neg = v < 0;
         if (neg) {
             v = -v;
         }
-        if (v < 1000 && v >= 1) {
+        if (v < 1000 && v >= 1 || v == 0) {
             final String fmt = neg ? "-%.3f" : "%.3f";
             return String.format(fmt, v);
         }
@@ -14,7 +20,7 @@ class Utils {
         if (v < 1) {
             power -= 1;
         }
-        int power3 = power - (power % 3);
+        int power3 = power - power % 3;
         if (power3 > power) {
             power3 -= 3;
         }
