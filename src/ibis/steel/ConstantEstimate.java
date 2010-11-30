@@ -68,8 +68,4 @@ public class ConstantEstimate implements Estimate {
     public String format() {
         return Utils.formatNumber(v);
     }
-
-    private double getAverage() {
-        return v;
-    }
 }

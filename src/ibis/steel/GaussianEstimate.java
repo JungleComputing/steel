@@ -57,8 +57,4 @@ public class GaussianEstimate implements Estimate {
         }
         return average + Math.sqrt(variance);
     }
-
-    private double getAverage() {
-        return average;
-    }
 }

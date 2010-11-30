@@ -6,7 +6,7 @@ public class LogGaussianEstimate implements Estimate {
     final double logVariance;
     final int sampleCount;
 
-    LogGaussianEstimate(final double average, final double variance,
+    public LogGaussianEstimate(final double average, final double variance,
             final int sampleCount) {
         this.logAverage = average;
         this.logVariance = variance;
@@ -41,10 +41,6 @@ public class LogGaussianEstimate implements Estimate {
     public String format() {
         return Utils.formatNumber(Math.exp(logAverage)) + "~"
                 + Utils.formatNumber(Math.exp(0.5 * logVariance));
-    }
-
-    private double getAverage() {
-        return Math.exp(logAverage);
     }
 
     private double getLogStdDev() {
