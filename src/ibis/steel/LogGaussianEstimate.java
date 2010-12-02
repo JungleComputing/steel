@@ -1,22 +1,40 @@
 package ibis.steel;
 
+/**
+ * An estimate using a log-gaussian model. That is, the log of the value is
+ * modeled as having a Gaussian distribution.
+ * 
+ * @author Kees van Reeuwijk
+ * 
+ */
 public class LogGaussianEstimate implements Estimate {
     private static final long serialVersionUID = 1L;
     final double logAverage;
     final double logVariance;
     final int sampleCount;
 
-    public LogGaussianEstimate(final double average, final double variance,
+    /**
+     * Constructs a new log-gaussian estimate with the given average and
+     * variance for the log of the estimate, and with the given sample count.
+     * 
+     * @param logAverage
+     *            The average of the log of the estimated value.
+     * @param logVariance
+     *            The variance of the log of the estimated value.
+     * @param sampleCount
+     *            The number of samples the estimate is based on.
+     */
+    public LogGaussianEstimate(final double logAverage, final double logVariance,
             final int sampleCount) {
-        this.logAverage = average;
-        this.logVariance = variance;
+        this.logAverage = logAverage;
+        this.logVariance = logVariance;
         this.sampleCount = sampleCount;
     }
 
     @Override
     public Estimate addIndependent(final Estimate est) {
-        if (est == null) {
-            return null;
+        if (est instanceof InfiniteEstimate) {
+            return est;
         }
         if (est instanceof ConstantEstimate) {
             final ConstantEstimate ce = (ConstantEstimate) est;

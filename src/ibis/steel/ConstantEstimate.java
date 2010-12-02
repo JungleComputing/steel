@@ -37,8 +37,8 @@ public class ConstantEstimate implements Estimate {
      */
     @Override
     public Estimate addIndependent(final Estimate est) {
-        if (est == null) {
-            return null;
+        if (est instanceof InfiniteEstimate) {
+            return est;
         }
         if (est instanceof ConstantEstimate) {
             // Adding two constants creates another constant.
