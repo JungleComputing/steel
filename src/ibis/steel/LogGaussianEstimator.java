@@ -15,10 +15,10 @@ public class LogGaussianEstimator implements Estimator {
     private double logS = 0.0;
     private int sampleCount = 0;
 
-    private LogGaussianEstimator(final double logAverage, final double logS,
-            final int sampleCount) {
+    private LogGaussianEstimator(final double logAverage,
+            final double logVariance, final int sampleCount) {
         this.logAverage = logAverage;
-        this.logS = logS;
+        this.logS = sampleCount * logVariance;
         this.sampleCount = sampleCount;
     }
 
@@ -26,13 +26,14 @@ public class LogGaussianEstimator implements Estimator {
      * Constructs a new log-gaussian estimator with the given initial average
      * and standard deviation.
      * 
-     * @param average
-     *            The initial average.
-     * @param stdDev
-     *            The initial standard deviation.
+     * @param logAverage
+     *            The initial average of the log.
+     * @param logVariance
+     *            The initial variance of the log.
      */
-    public LogGaussianEstimator(final double average, final double stdDev) {
-        this(Math.log(average), 2 * Math.log(stdDev), 1);
+    public LogGaussianEstimator(final double logAverage,
+            final double logVariance) {
+        this(logAverage, logVariance, 1);
     }
 
     private double getLogStdDev() {

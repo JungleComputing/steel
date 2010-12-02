@@ -24,11 +24,17 @@ public class LogGaussianEstimate implements Estimate {
      * @param sampleCount
      *            The number of samples the estimate is based on.
      */
-    public LogGaussianEstimate(final double logAverage, final double logVariance,
-            final int sampleCount) {
+    public LogGaussianEstimate(final double logAverage,
+            final double logVariance, final int sampleCount) {
         this.logAverage = logAverage;
         this.logVariance = logVariance;
         this.sampleCount = sampleCount;
+        if (Double.isInfinite(logAverage) || Double.isNaN(logAverage)
+                || Double.isInfinite(logVariance) || Double.isNaN(logVariance)
+                || logVariance < 0) {
+            throw new IllegalArgumentException("Bad distribution: logAverage="
+                    + logAverage + " logVariance=" + logVariance);
+        }
     }
 
     @Override
@@ -45,10 +51,9 @@ public class LogGaussianEstimate implements Estimate {
         if (est instanceof LogGaussianEstimate) {
             final LogGaussianEstimate lest = (LogGaussianEstimate) est;
             final double av = Math.exp(logAverage) + Math.exp(lest.logAverage);
-            final double var = Math.exp(logVariance)
-                    + Math.exp(lest.logVariance);
-            return new LogGaussianEstimate(Math.log(av), Math.log(var),
-                    Math.min(sampleCount, lest.sampleCount));
+            final double var = Math.max(logVariance, lest.logVariance);
+            return new LogGaussianEstimate(Math.log(av), var, Math.min(
+                    sampleCount, lest.sampleCount));
         }
         throw new IllegalArgumentException("LogGaussianEstimate: cannot add a "
                 + est.getClass().getName() + " estimate");
@@ -63,8 +68,7 @@ public class LogGaussianEstimate implements Estimate {
 
     @Override
     public String toString() {
-        return Utils.formatNumber(Math.exp(logAverage)) + "~"
-                + Utils.formatNumber(Math.exp(0.5 * logVariance));
+        return String.format("e^(%.3g+/-%.3g)", logAverage, getLogStdDev());
     }
 
     private double getLogStdDev() {

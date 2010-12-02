@@ -16,26 +16,34 @@ public class ExponentialDecayLogEstimator implements Estimator {
     private final double alpha;
     private int sampleCount = 0;
 
-    private ExponentialDecayLogEstimator(final double average,
-            final double variance, final double alpha, final int sampleCount) {
-        logAverage = Math.log(average);
-        logVariance = Math.log(variance);
+    private ExponentialDecayLogEstimator(final double logAverage,
+            final double logVariance, final double alpha, final int sampleCount) {
+        this.logAverage = logAverage;
+        this.logVariance = logVariance;
         this.alpha = alpha;
         this.sampleCount = sampleCount;
+        if (Double.isInfinite(logAverage) || Double.isNaN(logAverage)
+                || Double.isInfinite(logVariance) || Double.isNaN(logVariance)
+                || logVariance < 0) {
+            throw new IllegalArgumentException("Bad distribution: logAverage="
+                    + logAverage + " logVariance=" + logVariance);
+        }
     }
 
     /**
      * Constructs a new exponential decay estimator with a log-gaussian
      * probability model. Use the given log
      * 
-     * @param average
-     * @param variance
+     * @param logAverage
+     *            The initial average of the log.
+     * @param logVariance
+     *            The initial variance of the log.
      * @param alpha
      *            The decay factor of the estimator.
      */
-    public ExponentialDecayLogEstimator(final double average,
-            final double variance, final double alpha) {
-        this(average, variance, alpha, 1);
+    public ExponentialDecayLogEstimator(final double logAverage,
+            final double logVariance, final double alpha) {
+        this(logAverage, logVariance, alpha, 1);
     }
 
     /**
