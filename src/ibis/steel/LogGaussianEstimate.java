@@ -51,9 +51,10 @@ public class LogGaussianEstimate implements Estimate {
         if (est instanceof LogGaussianEstimate) {
             final LogGaussianEstimate lest = (LogGaussianEstimate) est;
             final double av = Math.exp(logAverage) + Math.exp(lest.logAverage);
-            final double var = Math.max(logVariance, lest.logVariance);
-            return new LogGaussianEstimate(Math.log(av), var, Math.min(
-                    sampleCount, lest.sampleCount));
+            final double var = Math.exp(logVariance)
+                    + Math.exp(lest.logVariance);
+            return new LogGaussianEstimate(Math.log(av), Math.log(var),
+                    Math.min(sampleCount, lest.sampleCount));
         }
         throw new IllegalArgumentException("LogGaussianEstimate: cannot add a "
                 + est.getClass().getName() + " estimate");

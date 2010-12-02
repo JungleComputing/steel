@@ -17,6 +17,12 @@ public class LogGaussianEstimator implements Estimator {
 
     private LogGaussianEstimator(final double logAverage,
             final double logVariance, final int sampleCount) {
+        if (Double.isInfinite(logAverage) || Double.isNaN(logAverage)
+                || Double.isInfinite(logVariance) || Double.isNaN(logVariance)
+                || logVariance < 0) {
+            throw new IllegalArgumentException("Bad distribution: logAverage="
+                    + logAverage + " logVariance=" + logVariance);
+        }
         this.logAverage = logAverage;
         this.logS = sampleCount * logVariance;
         this.sampleCount = sampleCount;
