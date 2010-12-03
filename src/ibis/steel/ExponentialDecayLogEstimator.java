@@ -92,6 +92,9 @@ public class ExponentialDecayLogEstimator implements Estimator {
         final double x = Math.log(v);
         final double diff = x - logMean;
         final double incr = alpha * diff;
+        System.out.println("addSample: v=" + v + " x=" + " diff=" + diff
+                + " incr=" + incr + " logMean=" + logMean + " logVariance="
+                + logVariance);
         logMean += incr;
         logVariance += incr * (x - logMean);
         sampleCount++;
