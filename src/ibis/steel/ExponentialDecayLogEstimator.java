@@ -22,9 +22,9 @@ public class ExponentialDecayLogEstimator implements Estimator {
         this.logVariance = logVariance;
         this.alpha = alpha;
         this.sampleCount = sampleCount;
-        if (logMean > Globals.MAX_LOG || Double.isNaN(logMean)
-                || logVariance > Globals.MAX_LOG || Double.isNaN(logVariance)
-                || logVariance < 0) {
+        if (logMean > Globals.MAX_LOG || logMean < -Globals.MAX_LOG
+                || Double.isNaN(logMean) || logVariance > Globals.MAX_LOG
+                || Double.isNaN(logVariance) || logVariance < 0) {
             throw new IllegalArgumentException("Bad distribution: logMean="
                     + logMean + " logVariance=" + logVariance);
         }
