@@ -92,11 +92,8 @@ public class ExponentialDecayLogEstimator implements Estimator {
         final double x = Math.log(v);
         final double diff = x - logMean;
         final double incr = alpha * diff;
-        System.out.println("addSample: v=" + v + " x=" + x + " diff=" + diff
-                + " incr=" + incr + " logMean=" + logMean + " logVariance="
-                + logVariance);
         logMean += incr;
-        logVariance += incr * (x - logMean);
+        logVariance = (1 - alpha) * (logVariance + diff * incr);
         sampleCount++;
         if (Double.isNaN(logMean) || Double.isNaN(logVariance)
                 || logMean < -Globals.MAX_LOG || logVariance < -Globals.MAX_LOG
