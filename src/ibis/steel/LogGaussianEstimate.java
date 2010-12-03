@@ -12,8 +12,6 @@ public class LogGaussianEstimate implements Estimate {
     final double logAverage;
     final double logVariance;
     final int sampleCount;
-    private static final double MAX_LOG = Math.log(Double.MAX_VALUE);
-
     /**
      * Constructs a new log-gaussian estimate with the given average and
      * variance for the log of the estimate, and with the given sample count.
@@ -30,8 +28,8 @@ public class LogGaussianEstimate implements Estimate {
         this.logAverage = logAverage;
         this.logVariance = logVariance;
         this.sampleCount = sampleCount;
-        if (logAverage > MAX_LOG || Double.isNaN(logAverage)
-                || logVariance > MAX_LOG || Double.isNaN(logVariance)
+        if (logAverage > Globals.MAX_LOG || Double.isNaN(logAverage)
+                || logVariance > Globals.MAX_LOG || Double.isNaN(logVariance)
                 || logVariance < 0) {
             throw new IllegalArgumentException("Bad distribution: logAverage="
                     + logAverage + " logVariance=" + logVariance);

@@ -22,8 +22,8 @@ public class ExponentialDecayLogEstimator implements Estimator {
         this.logVariance = logVariance;
         this.alpha = alpha;
         this.sampleCount = sampleCount;
-        if (Double.isInfinite(logAverage) || Double.isNaN(logAverage)
-                || Double.isInfinite(logVariance) || Double.isNaN(logVariance)
+        if (logAverage > Globals.MAX_LOG || Double.isNaN(logAverage)
+                || logVariance > Globals.MAX_LOG || Double.isNaN(logVariance)
                 || logVariance < 0) {
             throw new IllegalArgumentException("Bad distribution: logAverage="
                     + logAverage + " logVariance=" + logVariance);
@@ -60,17 +60,17 @@ public class ExponentialDecayLogEstimator implements Estimator {
             final ConstantEstimate cest = (ConstantEstimate) est;
             logAverage = Math.log(cest.v);
             logVariance = Math.log(10);
-            this.sampleCount = 1;
+            sampleCount = 1;
         } else if (est instanceof GaussianEstimate) {
             final GaussianEstimate gest = (GaussianEstimate) est;
             logAverage = Math.log(gest.average);
             logVariance = Math.log(gest.variance);
-            this.sampleCount = gest.sampleCount;
+            sampleCount = gest.sampleCount;
         } else if (est instanceof LogGaussianEstimate) {
             final LogGaussianEstimate gest = (LogGaussianEstimate) est;
             logAverage = gest.logAverage;
             logVariance = gest.logVariance;
-            this.sampleCount = gest.sampleCount;
+            sampleCount = gest.sampleCount;
         } else {
             throw new IllegalArgumentException(
                     "ExponentialDecayLogEstimator: cannot initialize with a "
