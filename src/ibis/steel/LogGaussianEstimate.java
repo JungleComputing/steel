@@ -31,7 +31,8 @@ public class LogGaussianEstimate implements Estimate {
         this.sampleCount = sampleCount;
         if (Double.isInfinite(logAverage) || Double.isNaN(logAverage)
                 || Double.isInfinite(logVariance) || Double.isNaN(logVariance)
-                || logVariance < 0) {
+                || logVariance < 0 || Double.isInfinite(Math.exp(logAverage))
+                || Double.isInfinite(Math.exp(logVariance))) {
             throw new IllegalArgumentException("Bad distribution: logAverage="
                     + logAverage + " logVariance=" + logVariance);
         }
