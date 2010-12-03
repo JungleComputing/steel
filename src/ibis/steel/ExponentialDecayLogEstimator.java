@@ -76,6 +76,13 @@ public class ExponentialDecayLogEstimator implements Estimator {
                     "ExponentialDecayLogEstimator: cannot initialize with a "
                             + est.getClass().getName() + " estimate");
         }
+        if (logAverage > Globals.MAX_LOG || Double.isNaN(logAverage)
+                || logVariance > Globals.MAX_LOG || Double.isNaN(logVariance)
+                || logVariance < 0) {
+            throw new IllegalArgumentException("Bad distribution: logAverage="
+                    + logAverage + " logVariance=" + logVariance + " est="
+                    + est);
+        }
     }
 
     @Override
