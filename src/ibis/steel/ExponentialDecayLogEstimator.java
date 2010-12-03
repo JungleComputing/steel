@@ -86,9 +86,12 @@ public class ExponentialDecayLogEstimator implements Estimator {
     }
 
     @Override
-    public void addSample(final double xx) {
-        final double x = Math.log(xx);
-        final double diff = x - logAverage;
+    public void addSample(final double v) {
+        if (v <= 0) {
+            throw new IllegalArgumentException("Bad sample: v=" + v);
+        }
+        final double value = Math.log(v);
+        final double diff = value - logAverage;
         final double incr = alpha * diff;
         logAverage += incr;
         logVariance = (1 - alpha) * logVariance + diff * incr;

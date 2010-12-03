@@ -24,7 +24,7 @@ public class LogGaussianEstimator implements Estimator {
                     + logAverage + " logVariance=" + logVariance);
         }
         this.logAverage = logAverage;
-        this.logS = sampleCount * logVariance;
+        logS = sampleCount * logVariance;
         this.sampleCount = sampleCount;
     }
 
@@ -55,6 +55,9 @@ public class LogGaussianEstimator implements Estimator {
 
     @Override
     public void addSample(final double v) {
+        if (v <= 0) {
+            throw new IllegalArgumentException("Bad sample: v=" + v);
+        }
         final double value = Math.log(v);
         sampleCount++;
         final double oldAverage = logAverage;
