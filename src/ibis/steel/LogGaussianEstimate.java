@@ -12,6 +12,7 @@ public class LogGaussianEstimate implements Estimate {
     final double logAverage;
     final double logVariance;
     final int sampleCount;
+
     /**
      * Constructs a new log-gaussian estimate with the given average and
      * variance for the log of the estimate, and with the given sample count.
@@ -62,7 +63,7 @@ public class LogGaussianEstimate implements Estimate {
     @Override
     public Estimate multiply(final double c) {
         final double lc = Math.log(c);
-        return new LogGaussianEstimate(lc + logAverage, 2 * lc + logVariance,
+        return new LogGaussianEstimate(lc + logAverage, logVariance,
                 sampleCount);
     }
 
