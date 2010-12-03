@@ -62,6 +62,12 @@ public class LogGaussianEstimate implements Estimate {
 
     @Override
     public Estimate multiply(final double c) {
+        if (c < 0) {
+            throw new IllegalArgumentException("Negative multiplier: c=" + c);
+        }
+        if (c == 0) {
+            return ConstantEstimate.ZERO;
+        }
         final double lc = Math.log(c);
         return new LogGaussianEstimate(lc + logAverage, logVariance,
                 sampleCount);
