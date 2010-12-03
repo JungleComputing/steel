@@ -11,35 +11,34 @@ package ibis.steel;
  */
 public class LogGaussianEstimator implements Estimator {
     private static final long serialVersionUID = 1L;
-    private double logAverage = 0.0;
+    private double logMean = 0.0;
     private double logS = 0.0;
     private int sampleCount = 0;
 
-    private LogGaussianEstimator(final double logAverage,
+    private LogGaussianEstimator(final double logMean,
             final double logVariance, final int sampleCount) {
-        if (Double.isInfinite(logAverage) || Double.isNaN(logAverage)
+        if (Double.isInfinite(logMean) || Double.isNaN(logMean)
                 || Double.isInfinite(logVariance) || Double.isNaN(logVariance)
                 || logVariance < 0) {
-            throw new IllegalArgumentException("Bad distribution: logAverage="
-                    + logAverage + " logVariance=" + logVariance);
+            throw new IllegalArgumentException("Bad distribution: logMean="
+                    + logMean + " logVariance=" + logVariance);
         }
-        this.logAverage = logAverage;
+        this.logMean = logMean;
         logS = sampleCount * logVariance;
         this.sampleCount = sampleCount;
     }
 
     /**
-     * Constructs a new log-gaussian estimator with the given initial average
-     * and standard deviation.
+     * Constructs a new log-gaussian estimator with the given initial mean and
+     * standard deviation.
      * 
-     * @param logAverage
-     *            The initial average of the log.
+     * @param logMean
+     *            The initial mean of the log.
      * @param logVariance
      *            The initial variance of the log.
      */
-    public LogGaussianEstimator(final double logAverage,
-            final double logVariance) {
-        this(logAverage, logVariance, 1);
+    public LogGaussianEstimator(final double logMean, final double logVariance) {
+        this(logMean, logVariance, 1);
     }
 
     private double getLogStdDev() {
@@ -48,8 +47,7 @@ public class LogGaussianEstimator implements Estimator {
 
     @Override
     public double getLikelyValue() {
-        final double v = logAverage + getLogStdDev()
-                * Globals.rng.nextGaussian();
+        final double v = logMean + getLogStdDev() * Globals.rng.nextGaussian();
         return Math.exp(v);
     }
 
@@ -60,9 +58,9 @@ public class LogGaussianEstimator implements Estimator {
         }
         final double value = Math.log(v);
         sampleCount++;
-        final double oldAverage = logAverage;
-        logAverage += (value - logAverage) / sampleCount;
-        logS += (value - oldAverage) * (value - logAverage);
+        final double oldMean = logMean;
+        logMean += (value - logMean) / sampleCount;
+        logS += (value - oldMean) * (value - logMean);
     }
 
     @Override
@@ -73,7 +71,7 @@ public class LogGaussianEstimator implements Estimator {
     @Override
     public double getHighEstimate() {
         final double stdDev = getLogStdDev();
-        final double logMax = logAverage + stdDev;
+        final double logMax = logMean + stdDev;
         return Math.exp(logMax);
     }
 
@@ -85,22 +83,21 @@ public class LogGaussianEstimator implements Estimator {
     @Override
     public String getStatisticsString() {
         final double stdDev = getLogStdDev();
-        final double rangeMin = Math.exp(logAverage - stdDev);
-        final double rangeMax = Math.exp(logAverage + stdDev);
-        return "average=" + Utils.formatNumber(Math.exp(logAverage))
-                + " range=" + Utils.formatNumber(rangeMin) + "..."
+        final double rangeMin = Math.exp(logMean - stdDev);
+        final double rangeMax = Math.exp(logMean + stdDev);
+        return "mean=" + Utils.formatNumber(Math.exp(logMean)) + " range="
+                + Utils.formatNumber(rangeMin) + "..."
                 + Utils.formatNumber(rangeMax) + " samples=" + sampleCount;
     }
 
     @Override
     public Estimate getEstimate() {
-        return new LogGaussianEstimate(logAverage, logS / sampleCount,
-                sampleCount);
+        return new LogGaussianEstimate(logMean, logS / sampleCount, sampleCount);
     }
 
     @Override
     public String format() {
-        return Utils.formatNumber(Math.exp(logAverage)) + "~"
+        return Utils.formatNumber(Math.exp(logMean)) + "~"
                 + Utils.formatNumber(Math.exp(0.5 * logS / sampleCount));
     }
 

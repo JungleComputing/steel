@@ -9,31 +9,31 @@ package ibis.steel;
  */
 public class LogGaussianEstimate implements Estimate {
     private static final long serialVersionUID = 1L;
-    final double logAverage;
+    final double logMean;
     final double logVariance;
     final int sampleCount;
 
     /**
-     * Constructs a new log-gaussian estimate with the given average and
-     * variance for the log of the estimate, and with the given sample count.
+     * Constructs a new log-gaussian estimate with the given mean and variance
+     * for the log of the estimate, and with the given sample count.
      * 
-     * @param logAverage
-     *            The average of the log of the estimated value.
+     * @param logMean
+     *            The mean of the log of the estimated value.
      * @param logVariance
      *            The variance of the log of the estimated value.
      * @param sampleCount
      *            The number of samples the estimate is based on.
      */
-    public LogGaussianEstimate(final double logAverage,
-            final double logVariance, final int sampleCount) {
-        this.logAverage = logAverage;
+    public LogGaussianEstimate(final double logMean, final double logVariance,
+            final int sampleCount) {
+        this.logMean = logMean;
         this.logVariance = logVariance;
         this.sampleCount = sampleCount;
-        if (logAverage > Globals.MAX_LOG || Double.isNaN(logAverage)
+        if (logMean > Globals.MAX_LOG || Double.isNaN(logMean)
                 || logVariance > Globals.MAX_LOG || Double.isNaN(logVariance)
                 || logVariance < 0) {
-            throw new IllegalArgumentException("Bad distribution: logAverage="
-                    + logAverage + " logVariance=" + logVariance);
+            throw new IllegalArgumentException("Bad distribution: logMean="
+                    + logMean + " logVariance=" + logVariance);
         }
     }
 
@@ -44,13 +44,13 @@ public class LogGaussianEstimate implements Estimate {
         }
         if (est instanceof ConstantEstimate) {
             final ConstantEstimate ce = (ConstantEstimate) est;
-            final double av = ce.v + Math.exp(logAverage);
+            final double av = ce.v + Math.exp(logMean);
             return new LogGaussianEstimate(Math.log(av), logVariance,
                     sampleCount);
         }
         if (est instanceof LogGaussianEstimate) {
             final LogGaussianEstimate lest = (LogGaussianEstimate) est;
-            final double av = Math.exp(logAverage) + Math.exp(lest.logAverage);
+            final double av = Math.exp(logMean) + Math.exp(lest.logMean);
             final double var = Math.exp(logVariance)
                     + Math.exp(lest.logVariance);
             return new LogGaussianEstimate(Math.log(av), Math.log(var),
@@ -69,13 +69,12 @@ public class LogGaussianEstimate implements Estimate {
             return ConstantEstimate.ZERO;
         }
         final double lc = Math.log(c);
-        return new LogGaussianEstimate(lc + logAverage, logVariance,
-                sampleCount);
+        return new LogGaussianEstimate(lc + logMean, logVariance, sampleCount);
     }
 
     @Override
     public String toString() {
-        return String.format("e^(%.3g+/-%.3g)", logAverage, getLogStdDev());
+        return String.format("e^(%.3g+/-%.3g)", logMean, getLogStdDev());
     }
 
     private double getLogStdDev() {
@@ -84,15 +83,14 @@ public class LogGaussianEstimate implements Estimate {
 
     @Override
     public double getLikelyValue() {
-        final double v = logAverage + getLogStdDev()
-                * Globals.rng.nextGaussian();
+        final double v = logMean + getLogStdDev() * Globals.rng.nextGaussian();
         return Math.exp(v);
     }
 
     @Override
     public double getHighEstimate() {
         final double stdDev = getLogStdDev();
-        final double logMax = logAverage + stdDev;
+        final double logMax = logMean + stdDev;
         return Math.exp(logMax);
     }
 }

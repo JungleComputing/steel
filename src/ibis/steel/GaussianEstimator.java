@@ -11,19 +11,19 @@ public class GaussianEstimator implements Estimator {
      * 
      */
     private static final long serialVersionUID = 1L;
-    private double average = 0.0;
+    private double mean = 0.0;
     private double S = 0.0;
     private int sampleCount = 0;
 
-    private GaussianEstimator(final double average, final double variance,
+    private GaussianEstimator(final double mean, final double variance,
             final int sampleCount) {
-        this.average = average;
+        this.mean = mean;
         S = variance * sampleCount;
         this.sampleCount = sampleCount;
     }
 
-    public GaussianEstimator(final double average, final double variance) {
-        this(average, variance, 1);
+    public GaussianEstimator(final double mean, final double variance) {
+        this(mean, variance, 1);
     }
 
     public GaussianEstimator() {
@@ -33,9 +33,9 @@ public class GaussianEstimator implements Estimator {
     @Override
     public void addSample(final double value) {
         sampleCount++;
-        final double oldAverage = average;
-        average += (value - average) / sampleCount;
-        S += (value - oldAverage) * (value - average);
+        final double oldMean = mean;
+        mean += (value - mean) / sampleCount;
+        S += (value - oldMean) * (value - mean);
     }
 
     private double getStdDev() {
@@ -45,25 +45,25 @@ public class GaussianEstimator implements Estimator {
     // FIXME: this is just an intuitive approximation of a likely values comp.
     double getLikelyError() {
         final double stdDev = getStdDev();
-        return stdDev + 0.1 * average / Math.sqrt(sampleCount);
+        return stdDev + 0.1 * mean / Math.sqrt(sampleCount);
     }
 
     @Override
     public double getHighEstimate() {
-        return average + Math.sqrt(S / sampleCount);
+        return mean + Math.sqrt(S / sampleCount);
     }
 
     @Override
     public double getLikelyValue() {
         final double err = getLikelyError();
-        return average + err * Globals.rng.nextGaussian();
+        return mean + err * Globals.rng.nextGaussian();
     }
 
     @Override
     public String getStatisticsString() {
         final double stdDev = getStdDev();
         final double err = getLikelyError();
-        return "average=" + Utils.formatNumber(average) + " stdDev="
+        return "mean=" + Utils.formatNumber(mean) + " stdDev="
                 + Utils.formatNumber(stdDev) + " likely error="
                 + Utils.formatNumber(err) + " samples=" + sampleCount;
     }
@@ -80,12 +80,12 @@ public class GaussianEstimator implements Estimator {
 
     @Override
     public Estimate getEstimate() {
-        return new GaussianEstimate(average, S / sampleCount, sampleCount);
+        return new GaussianEstimate(mean, S / sampleCount, sampleCount);
     }
 
     @Override
     public String format() {
-        return Utils.formatNumber(average) + "\u00B1"
+        return Utils.formatNumber(mean) + "\u00B1"
                 + Utils.formatNumber(getStdDev());
     }
 
