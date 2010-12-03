@@ -96,6 +96,11 @@ public class ExponentialDecayLogEstimator implements Estimator {
         logAverage += incr;
         logVariance = (1 - alpha) * logVariance + diff * incr;
         sampleCount++;
+        if (Double.isNaN(logAverage) || Double.isNaN(logVariance)) {
+            throw new IllegalArgumentException("Bad sample: v=" + v
+                    + " logAverage=" + logAverage + " logVariance="
+                    + logVariance);
+        }
     }
 
     @Override
