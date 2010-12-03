@@ -92,13 +92,14 @@ public class ExponentialDecayLogEstimator implements Estimator {
         final double x = Math.log(v);
         final double diff = x - logMean;
         final double incr = alpha * diff;
-        System.out.println("addSample: v=" + v + " x=" + " diff=" + diff
+        System.out.println("addSample: v=" + v + " x=" + x + " diff=" + diff
                 + " incr=" + incr + " logMean=" + logMean + " logVariance="
                 + logVariance);
         logMean += incr;
         logVariance += incr * (x - logMean);
         sampleCount++;
         if (Double.isNaN(logMean) || Double.isNaN(logVariance)
+                || logMean < -Globals.MAX_LOG || logVariance < -Globals.MAX_LOG
                 || logMean > Globals.MAX_LOG || logVariance > Globals.MAX_LOG) {
             throw new IllegalArgumentException("Bad sample: v=" + v
                     + " logMean=" + logMean + " logVariance=" + logVariance
