@@ -98,7 +98,8 @@ public class ExponentialDecayLogEstimator implements Estimator {
         if (Double.isNaN(logMean) || Double.isNaN(logVariance)
                 || logMean > Globals.MAX_LOG || logVariance > Globals.MAX_LOG) {
             throw new IllegalArgumentException("Bad sample: v=" + v
-                    + " logMean=" + logMean + " logVariance=" + logVariance);
+                    + " logMean=" + logMean + " logVariance=" + logVariance
+                    + " incr=" + incr);
         }
     }
 
