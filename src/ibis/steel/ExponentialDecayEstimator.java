@@ -62,7 +62,7 @@ public class ExponentialDecayEstimator implements Estimator {
         final double diff = x - mean;
         final double incr = alpha * diff;
         mean += incr;
-        variance += incr * (x - mean);
+        variance = (1 - alpha) * (variance + diff * incr);
         sampleCount++;
     }
 
