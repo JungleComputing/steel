@@ -87,7 +87,7 @@ public class ExponentialDecayLogEstimator implements Estimator {
 
     @Override
     public void addSample(final double v) {
-        if (v <= 0) {
+        if (v <= 0 || Double.isInfinite(v)) {
             throw new IllegalArgumentException("Bad sample: v=" + v);
         }
         final double value = Math.log(v);
