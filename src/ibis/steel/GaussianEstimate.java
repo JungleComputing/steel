@@ -56,7 +56,7 @@ public class GaussianEstimate implements Estimate {
 
     @Override
     public String toString() {
-        return Utils.formatNumber(mean) + "\u00B1"
+        return Utils.formatNumber(mean) + "+-"
                 + Utils.formatNumber(Math.sqrt(variance));
     }
 

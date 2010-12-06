@@ -74,7 +74,8 @@ public class LogGaussianEstimate implements Estimate {
 
     @Override
     public String toString() {
-        return String.format("e^(%.3g+/-%.3g)", logMean, getLogStdDev());
+        return String.format("%.3g*/%.3g", Math.exp(logMean),
+                Math.exp(getLogStdDev()));
     }
 
     private double getLogStdDev() {
