@@ -22,10 +22,22 @@ public class GaussianEstimator implements Estimator {
         this.sampleCount = sampleCount;
     }
 
+    /**
+     * Constructs a new estimator with the given initial mean and variance.
+     * 
+     * @param mean
+     *            The initial mean of the estimator.
+     * @param variance
+     *            The initial variance of the estimator.
+     */
     public GaussianEstimator(final double mean, final double variance) {
         this(mean, variance, 1);
     }
 
+    /**
+     * Constructs a new Gaussian estimator with an initial mean and variance of
+     * zero.
+     */
     public GaussianEstimator() {
         this(0, 0, 0);
     }

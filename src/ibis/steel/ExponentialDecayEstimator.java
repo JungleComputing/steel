@@ -24,15 +24,42 @@ public class ExponentialDecayEstimator implements Estimator {
         this.sampleCount = sampleCount;
     }
 
+    /**
+     * Constructs a new estimator.
+     * 
+     * @param mean
+     *            The initial mean of the estimator.
+     * @param variance
+     *            The initial variance of the estimator.
+     * @param alpha
+     *            The decay factor of the estimator.
+     */
     public ExponentialDecayEstimator(final double mean, final double variance,
             final double alpha) {
         this(mean, variance, alpha, 1);
     }
 
+    /**
+     * Constructs a new estimator with a decay factor 0.1.
+     * 
+     * @param mean
+     *            The initial mean of the estimator.
+     * @param variance
+     *            The initial variance of the estimator.
+     */
     public ExponentialDecayEstimator(final double mean, final double variance) {
-        this(mean, variance, 0.2, 1);
+        this(mean, variance, 0.1, 1);
     }
 
+    /**
+     * Constructs a new exponential decaying estimator with the given initial
+     * estimate and the given decay factor.
+     * 
+     * @param est
+     *            The initial estimate to use.
+     * @param alpha
+     *            The decay factor of the estimator.
+     */
     public ExponentialDecayEstimator(final Estimate est, final double alpha) {
         this.alpha = alpha;
         if (est instanceof ConstantEstimate) {

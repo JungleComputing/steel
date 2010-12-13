@@ -62,6 +62,11 @@ public interface Estimator {
      */
     String getStatisticsString();
 
+    /**
+     * Returns a string with the current state of the estimator.
+     * 
+     * @return The state of the estimator.
+     */
     String format();
 
 }
