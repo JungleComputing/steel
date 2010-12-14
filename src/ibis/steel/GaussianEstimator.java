@@ -34,14 +34,6 @@ public class GaussianEstimator implements Estimator {
         this(mean, variance, 1);
     }
 
-    /**
-     * Constructs a new Gaussian estimator with an initial mean and variance of
-     * zero.
-     */
-    public GaussianEstimator() {
-        this(0, 0, 0);
-    }
-
     @Override
     public void addSample(final double value) {
         sampleCount++;
