@@ -1,8 +1,8 @@
 package ibis.steel;
 
 /**
- * An estimate using a log-gaussian model. That is, the log of the value is
- * modeled as having a Gaussian distribution.
+ * An estimate using a log-Gaussian model. That is, the log of the value has a
+ * Gaussian distribution.
  * 
  * @author Kees van Reeuwijk
  * 
@@ -14,7 +14,7 @@ public class LogGaussianEstimate implements Estimate {
     final int sampleCount;
 
     /**
-     * Constructs a new log-gaussian estimate with the given mean and variance
+     * Constructs a new log-Gaussian estimate with the given mean and variance
      * for the log of the estimate, and with the given sample count.
      * 
      * @param logMean

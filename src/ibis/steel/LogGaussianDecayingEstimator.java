@@ -2,21 +2,21 @@ package ibis.steel;
 
 /**
  * 
- * An estimator that uses an exponentially decaying mean. That is, older samples
- * have exponentially decreasing influence on the estimate. The decay factor is
- * parameterized. The estimator assumes a Gaussian distribution of the sampled
- * signal.
+ * An estimator that uses a log-Gaussian estimator, where samples have an
+ * exponentially decaying mean. That is, older samples have exponentially
+ * decreasing influence on the estimate. The decay factor is parameterized. The
+ * estimator assumes a Gaussian distribution of the sampled signal.
  * 
  * @author Kees van Reeuwijk
  */
-public class ExponentialDecayLogEstimator implements Estimator {
+public class LogGaussianDecayingEstimator implements Estimator {
     private static final long serialVersionUID = 1L;
     private double logMean;
     private double logVariance;
     private final double alpha;
     private int sampleCount = 0;
 
-    private ExponentialDecayLogEstimator(final double logMean,
+    private LogGaussianDecayingEstimator(final double logMean,
             final double logVariance, final double alpha, final int sampleCount) {
         this.logMean = logMean;
         this.logVariance = logVariance;
@@ -41,7 +41,7 @@ public class ExponentialDecayLogEstimator implements Estimator {
      * @param alpha
      *            The decay factor of the estimator.
      */
-    public ExponentialDecayLogEstimator(final double logMean,
+    public LogGaussianDecayingEstimator(final double logMean,
             final double logVariance, final double alpha) {
         this(logMean, logVariance, alpha, 1);
     }
@@ -54,7 +54,7 @@ public class ExponentialDecayLogEstimator implements Estimator {
      * @param alpha
      *            The decay factor of the estimator.
      */
-    public ExponentialDecayLogEstimator(final Estimate est, final double alpha) {
+    public LogGaussianDecayingEstimator(final Estimate est, final double alpha) {
         this.alpha = alpha;
         if (est instanceof ConstantEstimate) {
             final ConstantEstimate cest = (ConstantEstimate) est;

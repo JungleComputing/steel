@@ -8,20 +8,20 @@ assume for the
 samples: in other words, each class has its own <em>model</em>.
 </p>
 <p>
-The {@link GaussianEstimator} assumes that the samples have a Gaussian
+The {@link ibis.steel.GaussianEstimator} assumes that the samples have a Gaussian
 distribution (lso known as the <em>normal</em> distribution).
-The {@link ExponentialDecayEstimator}
+The {@link ibis.steel.GuassianDecayingEstimator}
 is similar, but places more weight on more recent samples, and is
 therefore more accurate when the stochastic properties of the samples
-change over time.  The {@link LogGaussianEstimator} assumes that
+change over time.  The {@link ibis.steel.LogGaussianEstimator} assumes that
 the <em>logarithms</em> of the samples have a Guassian distribution.
 In some situations, for example for estimating network transmission
 times, this is a more realistic estimator, since it accurately models
 that such transmission times are rarely much faster than the average,
 but that significantly slower transmission times are likely to occur
-now and then.  The {@link ExponentialDecayLogEstimator} is similar, but
+now and then.  The {@link ibis.steel.LogGaussianDecayingEstimator} is similar, but
 again places more weight on recent samples.  All estimators implement
-the Java interface {@link Estimator}, allowing the user to abstract away
+the Java interface {@link ibis.steel.Estimator}, allowing the user to abstract away
 from the exact stochastic model of a particular estimate.
 </p>
 <p>
@@ -32,14 +32,14 @@ parameters) is even worse: in some cases such fixed initial parameters
 can be so far off that it renders the estimator virtually useless.
 </p>
 <p>
-Although the internal parameters of the models can be reached, the estimators are designed to produce <em>estimates</em>
+Although the internal parameters of the models are accessible, the estimators are designed to produce <em>estimates</em>
 that are essentially snapshots of the estimator state, and that can produce a random value that is an as accurate as possible
 prediction of the next value of the parameter.
 These estimates can be manipulated by adding (stochastically independent) other estimates, and multiplying the estimate with a constant
 value. This allows the construction of compound estimates from various simpler estimates.
-To allow more complex compound estimates, we also provide a {@link ConstantEstimate} that simply represents a constant
+To allow more complex compound estimates, we also provide a {@link ibis.steel.ConstantEstimate} that simply represents a constant
 value as an estimate that can be added and multipled.
-Similarly, the {@link InfiniteEstimate} represents an infinite value.
+Similarly, the {@link ibis.steel.InfiniteEstimate} represents an infinite value.
 </p>
 
 </body>

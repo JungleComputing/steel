@@ -2,21 +2,21 @@ package ibis.steel;
 
 /**
  * 
- * An estimator that uses an exponentially decaying mean. That is, older samples
- * have exponentially decreasing influence on the estimate. The decay factor is
- * parameterized. The estimator assumes a Gaussian distribution of the sampled
- * signal.
+ * An estimator that assumes a Gaussian distribution for the estimated
+ * value,  with the weight of older samples exponentially decaying.  
+ * The decay factor is a parameter of the instance of this estimator. The
+ * estimator assumes a Gaussian distribution of the sampled signal.
  * 
  * @author Kees van Reeuwijk
  */
-public class ExponentialDecayEstimator implements Estimator {
+public class GaussianDecayingEstimator implements Estimator {
     private static final long serialVersionUID = 1L;
     private double mean = 0.0;
     private double variance = 0.0;
     private final double alpha;
     private int sampleCount = 0;
 
-    private ExponentialDecayEstimator(final double mean, final double variance,
+    private GaussianDecayingEstimator(final double mean, final double variance,
             final double alpha, final int sampleCount) {
         this.mean = mean;
         this.variance = variance;
@@ -34,7 +34,7 @@ public class ExponentialDecayEstimator implements Estimator {
      * @param alpha
      *            The decay factor of the estimator.
      */
-    public ExponentialDecayEstimator(final double mean, final double variance,
+    public GaussianDecayingEstimator(final double mean, final double variance,
             final double alpha) {
         this(mean, variance, alpha, 1);
     }
@@ -47,7 +47,7 @@ public class ExponentialDecayEstimator implements Estimator {
      * @param variance
      *            The initial variance of the estimator.
      */
-    public ExponentialDecayEstimator(final double mean, final double variance) {
+    public GaussianDecayingEstimator(final double mean, final double variance) {
         this(mean, variance, 0.1, 1);
     }
 
@@ -60,7 +60,7 @@ public class ExponentialDecayEstimator implements Estimator {
      * @param alpha
      *            The decay factor of the estimator.
      */
-    public ExponentialDecayEstimator(final Estimate est, final double alpha) {
+    public GaussianDecayingEstimator(final Estimate est, final double alpha) {
         this.alpha = alpha;
         if (est instanceof ConstantEstimate) {
             final ConstantEstimate cest = (ConstantEstimate) est;

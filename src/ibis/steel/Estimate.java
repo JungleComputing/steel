@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 /**
  * The interface of an estimate.
+ * An estimate represents a constant stochastic variable. Its value is
+ * may not be accurately known, but it does not change over time.
+ * In contrast, {@link Estimator} instances represent a stochastic estimate
+ * of a value that can be updated by adding new samples.
  * 
  * @author Kees van Reeuwijk
  * 

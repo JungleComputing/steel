@@ -1,7 +1,7 @@
 package ibis.steel;
 
 /**
- * An estimator that assumes a log Gaussian distribution for the estimated
+ * An estimator that assumes a log-Gaussian distribution for the estimated
  * value. This distribution is particularly suitable for time estimates, since
  * it never results in negative values, and makes very small values very
  * unlikely.

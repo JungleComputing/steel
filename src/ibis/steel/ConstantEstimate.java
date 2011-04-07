@@ -20,7 +20,7 @@ public class ConstantEstimate implements Estimate {
     public static final ConstantEstimate ZERO = new ConstantEstimate(0.0);
 
     /**
-     * Given a value <code>v</code>, construct a constant estimate with the
+     * Given a value <code>v</code>, constructs a constant estimate with the
      * given value.
      * 
      * @param v
