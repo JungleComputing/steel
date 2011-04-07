@@ -8,7 +8,7 @@ the <em>model</em>.
 <p>
 The {@link GaussianEstimator} assumes that the samples have a Gaussian distribution, which is a very common assumption,
 although in some cases it produces inaccurate estimates.
-The {@link ExponentialDecayEstimator] is similar, but places more weight on more recent samples, and is therefore more accurate
+The {@link ExponentialDecayEstimator} is similar, but places more weight on more recent samples, and is therefore more accurate
 when the stochastic properties of the samples change over time.
 The {@link LogGaussianEstimator} assumes that the <em>logarithms</em> of the samples have a Guassian distribution.
 In some situations, for example for estimating network transmission times, this is a more realistic estimator, since it accurately models

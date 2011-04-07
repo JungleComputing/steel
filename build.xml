@@ -1,4 +1,4 @@
-<project name="IPL" default="build" basedir=".">
+<project name="steel" default="build" basedir=".">
     <description>
         Build file for steel - statistics for machine learning
     </description>
@@ -6,7 +6,7 @@
     <target name="build" description="Build the steel library" depends="clean,compile-lib" />
 
     <!-- Names for generated directories. -->
-    <property name="javadoc" value="javadoc/steel" />
+    <property name="javadoc" value="doc" />
 
     <property name="version" value="0.1" />
     <property name="version-tag" value="-${version}" />
@@ -71,7 +71,7 @@
     <target name="clean" description="Clean up">
         <delete dir="tmp" />
         <delete dir="lib" />
-        <delete dir="javadoc/steel" />
+        <delete dir="doc" />
 
         <delete file="${sources-zip}" />
         <delete file="ibis-steel${version-tag}.zip" />
@@ -81,6 +81,20 @@
         <ant dir="compile" inheritAll="false" target="build">
             <property name="version-tag" value="${version-tag}" />
         </ant>
+    </target>
+
+    <target name="javadoc">
+    <javadoc
+        access="public"
+        destdir="${javadoc}"
+        author="true"
+        version="true"
+        use="false"
+    >
+      <fileset dir="src" defaultexcludes="yes">
+        <include name="**/*.java"/>
+      </fileset>
+    </javadoc>
     </target>
 
 </project>
