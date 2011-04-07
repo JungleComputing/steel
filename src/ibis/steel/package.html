@@ -1,27 +1,35 @@
 <body>
 <p>
-This package contains a number of stochastic estimators.
-That is, given a series of samples, each estimator produces a prediction for the next
-value in the series. Every time a new sample is added, the estimate is updated. The estimators differ in the assumed distribution of the samples:
-the <em>model</em>.
+This package contains a number of stochastic estimators.  That is, given
+a series of samples, each estimator produces a prediction for the next
+value in the series. Every time a new sample is added, the estimate is
+updated. The estimator classes differ in the stochastic distribution that they
+assume for the
+samples: in other words, each class has its own <em>model</em>.
 </p>
 <p>
-The {@link GaussianEstimator} assumes that the samples have a Gaussian distribution, which is a very common assumption,
-although in some cases it produces inaccurate estimates.
-The {@link ExponentialDecayEstimator} is similar, but places more weight on more recent samples, and is therefore more accurate
-when the stochastic properties of the samples change over time.
-The {@link LogGaussianEstimator} assumes that the <em>logarithms</em> of the samples have a Guassian distribution.
-In some situations, for example for estimating network transmission times, this is a more realistic estimator, since it accurately models
-that such transmission times are rarely much faster than the average, but that that
-significantly slower transmission times are likely to occur now and then.
-The {@link ExponentialDecayLogEstimator} is similar, but again places more weight on recent samples.
-All estimators implement the Java interface {@link Estimator}, allowing the userto abstract away from the
-exact prediction model of a particular estimate.
+The {@link GaussianEstimator} assumes that the samples have a Gaussian
+distribution (lso known as the <em>normal</em> distribution).
+The {@link ExponentialDecayEstimator}
+is similar, but places more weight on more recent samples, and is
+therefore more accurate when the stochastic properties of the samples
+change over time.  The {@link LogGaussianEstimator} assumes that
+the <em>logarithms</em> of the samples have a Guassian distribution.
+In some situations, for example for estimating network transmission
+times, this is a more realistic estimator, since it accurately models
+that such transmission times are rarely much faster than the average,
+but that significantly slower transmission times are likely to occur
+now and then.  The {@link ExponentialDecayLogEstimator} is similar, but
+again places more weight on recent samples.  All estimators implement
+the Java interface {@link Estimator}, allowing the user to abstract away
+from the exact stochastic model of a particular estimate.
 </p>
 <p>
-All estimators have constructors that require an initial value for the internal parameters of their model.
-Although it is burdensome to demand such initial values from the user, the alternative (fixed initial parameters)
-is even worse: in some cases such fixed initial parameters can be so far off that it renders the estimator virtually useless.
+All constructors of the estimators require an initial value for the
+internal parameters of their model.  Although it is burdensome to
+demand such initial values from the user, the alternative (fixed initial
+parameters) is even worse: in some cases such fixed initial parameters
+can be so far off that it renders the estimator virtually useless.
 </p>
 <p>
 Although the internal parameters of the models can be reached, the estimators are designed to produce <em>estimates</em>
@@ -29,7 +37,7 @@ that are essentially snapshots of the estimator state, and that can produce a ra
 prediction of the next value of the parameter.
 These estimates can be manipulated by adding (stochastically independent) other estimates, and multiplying the estimate with a constant
 value. This allows the construction of compound estimates from various simpler estimates.
-To allow more complicated compound estimates, we also provides a {@link ConstantEstimate} that simply represents a constant
+To allow more complex compound estimates, we also provide a {@link ConstantEstimate} that simply represents a constant
 value as an estimate that can be added and multipled.
 Similarly, the {@link InfiniteEstimate} represents an infinite value.
 </p>
